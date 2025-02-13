@@ -6,7 +6,7 @@ import DeliveryDiningIcon from '@mui/icons-material/DeliveryDining';
 import HeadsetMicIcon from '@mui/icons-material/HeadsetMic';
 import VerifiedUserOutlinedIcon from '@mui/icons-material/VerifiedUserOutlined';
 import { Button } from '@mui/material';
-import { getCategoriesList, getHomeProducts, todaysProductApi } from '../Utils/Api';
+import {  getHomeProducts, todaysProductApi } from '../Utils/Api';
 import { Link } from 'react-router';
 
 
@@ -17,6 +17,10 @@ const Home = () => {
     const [product, setProduct] = useState([])
     const [categoriesList, setCategoriesList] = useState([])
     const [todayProducts, setTodayProducts] = useState([])
+
+    //  useEffect(()=> {
+    //         dispatch(getCategoriesList())
+    //     },[dispatch])
 
     useEffect(() => {
         const handleApi = async () => {
@@ -43,17 +47,17 @@ const Home = () => {
 
             }
         }
-        const categoriesList = async () => {
-            try {
+        // const categoriesList = async () => {
+        //     try {
 
-                const data = await getCategoriesList()
-                setCategoriesList(data)
-            } catch (error) {
-                console.log(error);
+        //         const data = await getCategoriesList()
+        //         setCategoriesList(data)
+        //     } catch (error) {
+        //         console.log(error);
 
-            }
-        }
-        categoriesList()
+        //     }
+        // }
+        // categoriesList()
         todaysProduct()
         handleApi()
     }, [])

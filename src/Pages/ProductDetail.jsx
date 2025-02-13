@@ -8,11 +8,16 @@ import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import { Link, useParams } from 'react-router';
 import { getSingleProduct } from '../Utils/Api';
+import { useDispatch, useSelector } from 'react-redux';
+// import { increment } from '../Features/ApiSlice';
 
 const ProductDetail = () => {
 
     const { productId } = useParams()
-    console.log(productId);
+    // const count = useSelector((state) => state.api.value);
+    // console.log(count);
+    
+    const dispatch = useDispatch();
 
 
     const [loader, setLoader] = useState(true)
@@ -47,7 +52,7 @@ const ProductDetail = () => {
             <div className='py-15 w-[85%] m-auto'>
                 <p className='text-neutral-500'>
                     <Link to={`/products/category/${category}`}>
-                    {category} 
+                        {category}
                     </Link>
                     / <span className='text-black'>{title}</span></p>
             </div>
@@ -91,7 +96,7 @@ const ProductDetail = () => {
 
                             <div style={{ borderTopLeftRadius: "4px", borderBottomLeftRadius: "4px" }} className='border-1 flex items-center justify-center px-2 py-1 cursor-pointer'><RemoveIcon /></div>
                             <div className='border-1 flex items-center justify-center px-7 py-2'>1</div>
-                            <div style={{ borderTopRightRadius: "4px", borderBottomRightRadius: "4px" }} className='border-1 flex items-center justify-center px-2 py-1 cursor-pointer'><AddIcon /></div>
+                            <button  style={{ borderTopRightRadius: "4px", borderBottomRightRadius: "4px" }} className='border-1 flex items-center justify-center px-2 py-1 cursor-pointer'><AddIcon /></button>
                         </div>
                         <Button style={{ backgroundColor: "var(--button2)", margin: "auto", cursor: "pointer", padding: "8px 40px" }} variant="contained">Buy Now</Button>
                         <div className='border-2 flex items-center justify-center rounded-md p-1 px-3 cursor-pointer'>
