@@ -35,3 +35,41 @@ export const getCategoriesList = async () => {
 
     }
 }
+
+export const getProductByCategories = async (category = "beauty") => {
+    try {
+        const response = await fetch(`https://dummyjson.com/products/category/${category}?select=title,price,images`)
+        const data = await response.json()
+
+        return data
+    } catch (error) {
+        console.log(error);
+
+    }
+
+}
+
+export const getAllProducts = async () => {
+    try {
+        const response = await fetch('https://dummyjson.com/products?limit=20&select=title,price,rating,images,discountPercentage')
+        const data = await response.json()
+
+        return data
+    } catch (error) {
+        console.log(error);
+
+    }
+
+}
+
+export const getSingleProduct = async(id = 3)=> {
+    try {
+        const response = await fetch(`https://dummyjson.com/products/${id}`)
+        const data = await response.json()
+
+        return data
+    } catch (error) {
+        console.log(error);
+
+    }
+} 

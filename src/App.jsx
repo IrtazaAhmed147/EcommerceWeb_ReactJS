@@ -7,6 +7,7 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import ProductDetail from './Pages/ProductDetail'
 import Wishlist from "./Pages/Wishlist"
 import Cart from './Pages/Cart'
+import ProductsPage from './Pages/ProductsPage'
 
 function App() {
 
@@ -18,7 +19,8 @@ function App() {
 
         <Routes>
           <Route path='/' element={<Home />} />
-          <Route path='/product/1' element={<ProductDetail />} />
+          <Route path='/product/:productId' element={<ProductDetail />} />
+          <Route path='/products/category/:categorySlug' element={<ProductsPage />} />
           <Route path='/wishlist' element={<Wishlist />} />
           <Route path='/cart' element={<Cart />} />
         </Routes>

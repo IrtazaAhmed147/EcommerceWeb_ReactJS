@@ -7,6 +7,7 @@ import HeadsetMicIcon from '@mui/icons-material/HeadsetMic';
 import VerifiedUserOutlinedIcon from '@mui/icons-material/VerifiedUserOutlined';
 import { Button } from '@mui/material';
 import { getCategoriesList, getHomeProducts, todaysProductApi } from '../Utils/Api';
+import { Link } from 'react-router';
 
 
 
@@ -66,7 +67,7 @@ const Home = () => {
             <div className='flex w-full'>
                 <div className='w-[25%] lg:w-[20%] border-r pt-7 pe-4  justify-end hidden md:flex'>
                     <ul className='flex flex-col gap-[10px]'>
-                        {categoriesList?.slice(0,8).map((category) => {
+                        {categoriesList?.slice(0, 8).map((category) => {
                             return <li key={category.name} className='duration-[0.5s] transition-all ease-in-out flex justify-between w-[160px] px-2 rounded-md hover:bg-neutral-200 cursor-pointer'>
                                 <p>{category.name}</p>
                                 <p className='hidden'>
@@ -91,7 +92,7 @@ const Home = () => {
                     <h3 className='text-red-900 '>Today's</h3>
                 </div>
                 <div className='flex justify-center w-full gap-3 flex-wrap'>
-                 
+
                     {todayProducts?.map((item) => {
                         return <Card key={item.id} {...item} />
 
@@ -99,8 +100,9 @@ const Home = () => {
 
                 </div>
                 <div className='flex justify-center w-full'>
-
-                    <Button style={{ backgroundColor: "var(--button2)", margin: "auto" }} variant="contained">View All Products</Button>
+                    <Link to={`/products/category/all`}>
+                        <Button style={{ backgroundColor: "var(--button2)", margin: "auto" }} variant="contained">View All Products</Button>
+                    </Link>
                 </div>
             </div>
             <div className=' w-[90%] m-auto my-4'>
@@ -112,7 +114,7 @@ const Home = () => {
                 <h1 className='text-2xl font-bold'>Browse By Category</h1>
                 <div className=' w-[90%] m-auto mt-6 mb-13'>
 
-                    <SliderComponent where="categories" data={categoriesList}/>
+                    <SliderComponent where="categories" data={categoriesList} />
 
                 </div>
 
@@ -136,8 +138,9 @@ const Home = () => {
 
                 </div>
                 <div className='flex justify-center w-full'>
-
-                    <Button style={{ backgroundColor: "var(--button2)", margin: "auto" }} variant="contained">View All Products</Button>
+                    <Link to={`/products/category/all`}>
+                        <Button style={{ backgroundColor: "var(--button2)", margin: "auto" }} variant="contained">View All Products</Button>
+                    </Link>
                 </div>
 
             </div>
