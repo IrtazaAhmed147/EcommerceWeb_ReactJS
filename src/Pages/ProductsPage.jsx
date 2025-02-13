@@ -9,19 +9,16 @@ import { useDispatch, useSelector } from 'react-redux';
 
 const ProductsPage = () => {
 
-    // const [categoriesList, setCategoriesList] = useState([])
-    // const [products, setProducts] = useState([])
 
     const { categorySlug } = useParams()
-    const [listLoader, setListLoader] = useState(false)
-    const [loader, setLoader] = useState(false)
+    const listLoader = useSelector(state => state.loader.categoryListApi);
+
 
     const products = useSelector(state => state.api.products);
     const categoriesList = useSelector(state => state.api.categoryList);
     const dispatch = useDispatch();
+    const loader = useSelector(state => state.loader.AllProductsApi);
 
-
-    console.log("outside");
 
     useEffect(() => {
         if (categorySlug !== "all") {
@@ -30,14 +27,17 @@ const ProductsPage = () => {
             dispatch(getAllProducts());
         }
     }, [dispatch, categorySlug]);
-    
-    useEffect(()=> {
-        dispatch(getCategoriesList())
-    },[dispatch])
-    
-    
 
-    
+    useEffect(() => {
+        if (categoriesList.length > 0) {
+            return
+        }
+        dispatch(getCategoriesList())
+    }, [dispatch])
+
+
+
+
     return (
         <>
             <div className='flex w-full'>
@@ -59,13 +59,13 @@ const ProductsPage = () => {
                             </li>
                             {categoriesList?.map((category) => {
                                 return <li key={category.name} onClick={() => dispatch(getProductByCategories(category.slug))} className='duration-[0.5s] transition-all ease-in-out flex justify-between w-[160px] px-2 rounded-md hover:bg-neutral-200 cursor-pointer'>
-                                        <Link to={`/products/category/${category.slug}`}>
+                                    <Link to={`/products/category/${category.slug}`}>
                                         <p>{category.name}</p>
                                         <p className='hidden'>
                                             <NavigateNextIcon />
                                         </p>
-                                        </Link>
-                                    
+                                    </Link>
+
                                 </li>
                             })} </>
                         }
@@ -77,7 +77,7 @@ const ProductsPage = () => {
                     {loader && <div className='w-[100%] h-screen flex items-center justify-center'>
                         <CircularProgress color="inherit" />
                     </div>}
-                    {!loader && <> <h1 className='text-4xl font-semibold my-3'>{categorySlug}</h1>
+                    {!loader && <> <h1 className='text-4xl font-semibold my-3'>{categorySlug.charAt(0).toUpperCase() + categorySlug.slice(1)}</h1>
 
                         <div className='flex flex-wrap gap-3 p-2'>
                             {products?.map((item) => {

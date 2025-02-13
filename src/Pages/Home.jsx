@@ -5,65 +5,43 @@ import Card from '../Components/Card';
 import DeliveryDiningIcon from '@mui/icons-material/DeliveryDining';
 import HeadsetMicIcon from '@mui/icons-material/HeadsetMic';
 import VerifiedUserOutlinedIcon from '@mui/icons-material/VerifiedUserOutlined';
-import { Button } from '@mui/material';
-import {  getHomeProducts, todaysProductApi } from '../Utils/Api';
+import { Button, CircularProgress } from '@mui/material';
 import { Link } from 'react-router';
+import { getCategoriesList, getHomeProducts, todaysProductApi } from '../Features/ApiSlice';
+import { useDispatch, useSelector } from 'react-redux';
 
 
 
 const Home = () => {
 
 
-    const [product, setProduct] = useState([])
-    const [categoriesList, setCategoriesList] = useState([])
-    const [todayProducts, setTodayProducts] = useState([])
+    const dispatch = useDispatch();
+    const products = useSelector(state => state.api.homeProducts);
+    const todayProducts = useSelector(state => state.api.todayProducts);
 
-    //  useEffect(()=> {
-    //         dispatch(getCategoriesList())
-    //     },[dispatch])
+    const categoriesList = useSelector(state => state.api.categoryList);
+    const categoriesListLoader = useSelector(state => state.loader.categoryListApi);
+    const loader = useSelector(state => state.loader.HomeProductsApi);
+    const todayLoader = useSelector(state => state.loader.todayProductApi);
 
     useEffect(() => {
-        const handleApi = async () => {
-            try {
-
-                const data = await getHomeProducts()
-                console.log(data);
-
-                setProduct(data.products)
-            } catch (error) {
-                console.log(error);
-
-            }
+        dispatch(getHomeProducts())
+    }, [dispatch])
+    useEffect(() => {
+        dispatch(todaysProductApi())
+    }, [dispatch])
+    useEffect(() => {
+        if (categoriesList.length > 0) {
+            return
         }
-        const todaysProduct = async () => {
-            try {
-
-                const data = await todaysProductApi()
-                console.log(data);
-
-                setTodayProducts(data.products)
-            } catch (error) {
-                console.log(error);
-
-            }
-        }
-        // const categoriesList = async () => {
-        //     try {
-
-        //         const data = await getCategoriesList()
-        //         setCategoriesList(data)
-        //     } catch (error) {
-        //         console.log(error);
-
-        //     }
-        // }
-        // categoriesList()
-        todaysProduct()
-        handleApi()
-    }, [])
+        dispatch(getCategoriesList())
+    }, [dispatch])
 
 
 
+
+
+    console.log(todayProducts);
 
 
     return (
@@ -71,7 +49,14 @@ const Home = () => {
             <div className='flex w-full'>
                 <div className='w-[25%] lg:w-[20%] border-r pt-7 pe-4  justify-end hidden md:flex'>
                     <ul className='flex flex-col gap-[10px]'>
-                        {categoriesList?.slice(0, 8).map((category) => {
+
+                        {categoriesListLoader && <>
+                            <div className='w-[150px] h-[400px] flex items-center justify-center'>
+                                <CircularProgress color="inherit" />
+                            </div>
+                        </>}
+
+                        {!categoriesListLoader && categoriesList?.slice(0, 8).map((category) => {
                             return <li key={category.name} className='duration-[0.5s] transition-all ease-in-out flex justify-between w-[160px] px-2 rounded-md hover:bg-neutral-200 cursor-pointer'>
                                 <p>{category.name}</p>
                                 <p className='hidden'>
@@ -93,18 +78,20 @@ const Home = () => {
                 <div className='flex gap-1 items-center mb-3    '>
 
                     <div className='bg-red-900 h-[20px] w-[13px] rounded-sm'></div>
-                    <h3 className='text-red-900 '>Today's</h3>
+                    <h3 className='text-red-900 '>Groceries</h3>
                 </div>
-                <div className='flex justify-center w-full gap-3 flex-wrap'>
+                <div className='flex justify-center w-full gap-3 flex-wrap min-h-[300px] items-center'>
 
-                    {todayProducts?.map((item) => {
+                    {todayLoader && <CircularProgress color="inherit" />}
+
+                    {!todayLoader && todayProducts?.map((item) => {
                         return <Card key={item.id} {...item} />
 
                     })}
 
                 </div>
                 <div className='flex justify-center w-full'>
-                    <Link to={`/products/category/all`}>
+                    <Link to={`/products/category/groceries`}>
                         <Button style={{ backgroundColor: "var(--button2)", margin: "auto" }} variant="contained">View All Products</Button>
                     </Link>
                 </div>
@@ -134,8 +121,9 @@ const Home = () => {
                     <h3 className='text-red-900 '>Our Products</h3>
                 </div>
                 <h1 className='text-4xl font-bold'>Explore Our Products</h1>
-                <div className='flex justify-center w-full gap-3 flex-wrap'>
-                    {product?.map((item) => {
+                <div className='flex justify-center w-full gap-3 flex-wrap min-h-[300px] items-center'>
+                    {loader && <CircularProgress color="inherit" />}
+                    {!loader && products?.map((item) => {
                         return <Card key={item.id} {...item} />
 
                     })}

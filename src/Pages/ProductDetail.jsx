@@ -3,52 +3,42 @@ import StarIcon from '@mui/icons-material/Star';
 import VerifiedUserOutlinedIcon from '@mui/icons-material/VerifiedUserOutlined';
 import AutorenewOutlinedIcon from '@mui/icons-material/AutorenewOutlined';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
-import { Button } from '@mui/material';
+import { Button, CircularProgress } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import { Link, useParams } from 'react-router';
-import { getSingleProduct } from '../Utils/Api';
 import { useDispatch, useSelector } from 'react-redux';
-// import { increment } from '../Features/ApiSlice';
+import { getSingleProduct } from '../Features/ApiSlice';
 
 const ProductDetail = () => {
 
     const { productId } = useParams()
-    // const count = useSelector((state) => state.api.value);
-    // console.log(count);
-    
+
     const dispatch = useDispatch();
 
 
-    const [loader, setLoader] = useState(true)
-    const [product, setProduct] = useState({})
+    const singleProduct = useSelector(state => state.api.singleProduct);
+    const loader = useSelector(state => state.loader.singleProductApi);
 
     useEffect(() => {
-        const productDetail = async () => {
-            try {
-                setLoader(true)
-                const data = await getSingleProduct(productId)
-                console.log(data);
+        dispatch(getSingleProduct(productId))
+    }, [dispatch])
 
-                setProduct(data)
-                setLoader(false)
-            } catch (error) {
-                console.log(error);
-                setLoader(false)
-            }
-        }
-        productDetail()
 
-    }, [])
 
-    const { title, description, category, brand, rating, dimensions, reviews, returnPolicy, warrantyInformation, images, price, discountPercentage } = product
+    const { title, description, category, brand, rating, dimensions, reviews, returnPolicy, warrantyInformation, images, price, discountPercentage } = singleProduct
 
     let discountedPrice = price - (price * (discountPercentage / 100))
 
-    if (loader) return <h1>Loading...</h1>
+    if (loader) return <div className='w-full flex justify-center items-center h-screen'>
+        <CircularProgress color="inherit" />
+    </div>
 
     return (
         <>
+
+
+
             <div className='py-15 w-[85%] m-auto'>
                 <p className='text-neutral-500'>
                     <Link to={`/products/category/${category}`}>
@@ -71,7 +61,7 @@ const ProductDetail = () => {
                     </div>
                     <div className='w-[500px] h-[550px] bg-neutral-200 flex justify-center items-center bg-neutral-200 flex justify-center items-center'>
 
-                        <img style={{ width: "446px", height: "315px" }} src={images[0]} alt="" />
+                        <img style={{ width: "446px", height: "315px" }} src={images ? images[0] : "https://img.freepik.com/premium-vector/default-image-icon-vector-missing-picture-page-website-design-mobile-app-no-photo-available_87543-11093.jpg"} alt="" />
                     </div>
                 </div>
                 <div className='w-[400px]'>
@@ -86,9 +76,9 @@ const ProductDetail = () => {
                     <p>{description}</p>
                     <p className='mb-3'>Brand: <span className='font-semibold'>{brand}</span></p>
                     <h1 className='text-xl font-semibold'>Dimensions</h1>
-                    <p className=''>Width: {dimensions.width}</p>
-                    <p className=''>Height: {dimensions.height}</p>
-                    <p className='mb-3'>Depth: {dimensions.depth}</p>
+                    <p className=''>Width: {dimensions?.width}</p>
+                    <p className=''>Height: {dimensions?.height}</p>
+                    <p className='mb-3'>Depth: {dimensions?.depth}</p>
                     <hr />
 
                     <div className='flex gap-2 mt-6'>
@@ -96,7 +86,7 @@ const ProductDetail = () => {
 
                             <div style={{ borderTopLeftRadius: "4px", borderBottomLeftRadius: "4px" }} className='border-1 flex items-center justify-center px-2 py-1 cursor-pointer'><RemoveIcon /></div>
                             <div className='border-1 flex items-center justify-center px-7 py-2'>1</div>
-                            <button  style={{ borderTopRightRadius: "4px", borderBottomRightRadius: "4px" }} className='border-1 flex items-center justify-center px-2 py-1 cursor-pointer'><AddIcon /></button>
+                            <button style={{ borderTopRightRadius: "4px", borderBottomRightRadius: "4px" }} className='border-1 flex items-center justify-center px-2 py-1 cursor-pointer'><AddIcon /></button>
                         </div>
                         <Button style={{ backgroundColor: "var(--button2)", margin: "auto", cursor: "pointer", padding: "8px 40px" }} variant="contained">Buy Now</Button>
                         <div className='border-2 flex items-center justify-center rounded-md p-1 px-3 cursor-pointer'>
