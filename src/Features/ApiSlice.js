@@ -9,10 +9,11 @@ export const getApi = createSlice({
         homeProducts: [],
         todayProducts: [],
         singleProduct: {},
+        search: "",
     },
     reducers: {
         setProducts: (state, action) => {
-            state.products = action.payload.products;
+            state.products = action.payload;
         },
         setCategoryList: (state, action) => {
             state.categoryList = action.payload;
@@ -26,11 +27,14 @@ export const getApi = createSlice({
         setSingleProduct: (state, action) => {
             state.singleProduct = action.payload;
         },
+        setSearch: (state, action)=> {
+            state.search = action.payload
+        }
     }
 })
 
 
-export const { setProducts, setCategoryList, setHomeProducts, setTodayProducts, setSingleProduct } = getApi.actions
+export const { setProducts, setCategoryList, setHomeProducts, setTodayProducts, setSingleProduct,setSearch } = getApi.actions
 export default getApi.reducer
 
 
@@ -73,6 +77,21 @@ export const getProductByCategories = (category = "beauty") => async (dispatch) 
     dispatch(setApiLoading({ apiName: "AllProductsApi", isLoading: true }));
     try {
         const response = await fetch(`https://dummyjson.com/products/category/${category}?select=title,price,images,discountPercentage`)
+        const data = await response.json()
+        dispatch(setApiLoading({ apiName: "AllProductsApi", isLoading: false }));
+        dispatch(setProducts(data))
+        return data
+    } catch (error) {
+        dispatch(setApiLoading({ apiName: "AllProductsApi", isLoading: false }));
+        console.log(error);
+
+    }
+
+}
+export const getProductBySearch = (input = "ball") => async (dispatch) => {
+    dispatch(setApiLoading({ apiName: "AllProductsApi", isLoading: true }));
+    try {
+        const response = await fetch(`https://dummyjson.com/products/search?q=${input}`)
         const data = await response.json()
         dispatch(setApiLoading({ apiName: "AllProductsApi", isLoading: false }));
         dispatch(setProducts(data))

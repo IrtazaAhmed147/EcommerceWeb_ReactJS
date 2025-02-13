@@ -1,6 +1,5 @@
 import * as React from 'react';
 import AppBar from '@mui/material/AppBar';
-import { styled, alpha } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
@@ -10,59 +9,23 @@ import MenuIcon from '@mui/icons-material/Menu';
 import Container from '@mui/material/Container';
 import Button from '@mui/material/Button';
 import MenuItem from '@mui/material/MenuItem';
-import AdbIcon from '@mui/icons-material/Adb';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import SearchIcon from '@mui/icons-material/Search';
 import Badge from '@mui/material/Badge';
-import InputBase from '@mui/material/InputBase';
-import { Link } from 'react-router';
+import { Link, useNavigate } from 'react-router';
+import { setSearch } from '../Features/ApiSlice';
+import { useDispatch } from 'react-redux';
 
 const Navbar = () => {
 
 
     const pages = ['Home', 'Contact', 'About'];
+    const input = React.useRef(null)
+
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
 
 
-    const Search = styled('div')(({ theme }) => ({
-
-        position: 'relative',
-        borderRadius: theme.shape.borderRadius,
-        backgroundColor: alpha(theme.palette.common.white, 0.15),
-
-        marginLeft: 0,
-        width: '100%',
-        [theme.breakpoints.up('sm')]: {
-            marginLeft: theme.spacing(1),
-            width: 'auto',
-        },
-        backgroundColor: "var(--secondary)"
-    }));
-
-    const SearchIconWrapper = styled('div')(({ theme }) => ({
-        padding: theme.spacing(0, 2),
-        height: '100%',
-        position: 'absolute',
-        pointerEvents: 'none',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-    }));
-
-    const StyledInputBase = styled(InputBase)(({ theme }) => ({
-        color: 'inherit',
-        width: "100%",
-        '& .MuiInputBase-input': {
-            padding: theme.spacing(1, 1, 1, 0),
-            // vertical padding + font size from searchIcon
-            paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-            transition: theme.transitions.create('width'),
-            [theme.breakpoints.up('sm')]: {
-                width: "28ch",
-
-            },
-        },
-    }));
 
     const [anchorElNav, setAnchorElNav] = React.useState(null);
 
@@ -74,6 +37,20 @@ const Navbar = () => {
         setAnchorElNav(null);
     };
 
+    const handleSubmit = (e) => {
+        e.preventDefault()
+        console.log(input.current.value);
+
+        if (!input.current.value.trim()) {
+            return
+        }
+
+        dispatch(setSearch(input.current.value));
+        input.current.value = ""
+        navigate(`/products/category/all`)
+
+
+    }
 
 
 
@@ -107,6 +84,7 @@ const Navbar = () => {
                             EXCLUSIVE
                         </Typography>
 
+                        {/* Responsive */}
                         <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
                             <IconButton
                                 size="large"
@@ -164,7 +142,7 @@ const Navbar = () => {
                         </Typography>
                         <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
                             {pages.map((page) => (
-                                <Link to={page === "Home" ? "/" : "/contact"} >
+                                <Link to={page === "Home" ? "/" : "/contact"} key={page}>
 
                                     <Button
                                         key={page}
@@ -177,15 +155,25 @@ const Navbar = () => {
                             ))}
                         </Box>
                         <Box sx={{ flexGrow: 0, display: "flex", justifyContent: "center", alignItems: "center", gap: "20px" }}>
-                            <Search sx={{ display: { xs: 'none', sm: 'block' } }}>
-                                <SearchIconWrapper>
-                                    <SearchIcon />
-                                </SearchIconWrapper>
-                                <StyledInputBase
-                                    placeholder="What are you looking for?"
-                                    inputProps={{ 'aria-label': 'search' }}
-                                />
-                            </Search>
+
+                            <form className="hidden items-center max-w-sm mx-auto md:flex w-[300px]" onSubmit={handleSubmit}>
+                                <label htmlFor="simple-search" className="sr-only">Search</label>
+                                <div className="relative w-full">
+                                    <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                                        <svg className="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 20">
+                                            <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 5v10M3 5a2 2 0 1 0 0-4 2 2 0 0 0 0 4Zm0 10a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm12 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm0 0V6a3 3 0 0 0-3-3H9m1.5-2-2 2 2 2" />
+                                        </svg>
+                                    </div>
+                                    <input ref={input} type="text" id="simple-search" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:outline-none focus:ring-neutral-500  block w-full ps-10 p-2.5" placeholder="What are you looking for?" required />
+                                </div>
+                                <button type="submit" className="cursor-pointer p-2.5 ms-2 text-sm font-medium text-black bg-neutral-300 rounded-lg border border-neutral-300 hover:bg-neutral-400 focus:outline-none  ">
+                                    <svg className="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                                        <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
+                                    </svg>
+                                    <span className="sr-only">Search</span>
+                                </button>
+                            </form>
+
 
                             <Link to="/wishlist">
                                 <Badge badgeContent={1} color="secondary">
@@ -199,15 +187,23 @@ const Navbar = () => {
                             </Link>
 
                         </Box>
-                        <Search sx={{ display: { xs: 'block', sm: 'none' }, marginBottom: "5px" }}>
-                            <SearchIconWrapper>
-                                <SearchIcon />
-                            </SearchIconWrapper>
-                            <StyledInputBase
-                                placeholder="What are you looking for?"
-                                inputProps={{ 'aria-label': 'search' }}
-                            />
-                        </Search>
+                        <form className="flex items-center mx-auto md:hidden w-[100%] mb-2" onSubmit={handleSubmit}>
+                            <label htmlFor="simple-search" className="sr-only">Search</label>
+                            <div className="relative w-full">
+                                <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                                    <svg className="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 20">
+                                        <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 5v10M3 5a2 2 0 1 0 0-4 2 2 0 0 0 0 4Zm0 10a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm12 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm0 0V6a3 3 0 0 0-3-3H9m1.5-2-2 2 2 2" />
+                                    </svg>
+                                </div>
+                                <input ref={input} type="text" id="simple-search" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:outline-none focus:ring-neutral-500  block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-neutral-500 dark:focus:border-neutral-500" placeholder="What are you looking for?" required />
+                            </div>
+                            <button type="submit" className="p-2.5 ms-2 text-sm font-medium text-black bg-neutral-300 rounded-lg border border-neutral-300 hover:bg-neutral-400 focus:outline-none  ">
+                                <svg className="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
+                                </svg>
+                                <span className="sr-only">Search</span>
+                            </button>
+                        </form>
                     </Toolbar>
                 </Container>
             </AppBar>

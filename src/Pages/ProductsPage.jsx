@@ -4,7 +4,7 @@ import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import Card from '../Components/Card';
 import { Link, useParams } from 'react-router';
 import { CircularProgress } from '@mui/material';
-import { getAllProducts, getCategoriesList, getProductByCategories } from '../Features/ApiSlice';
+import { getAllProducts, getCategoriesList, getProductByCategories, getProductBySearch } from '../Features/ApiSlice';
 import { useDispatch, useSelector } from 'react-redux';
 
 const ProductsPage = () => {
@@ -14,19 +14,33 @@ const ProductsPage = () => {
     const listLoader = useSelector(state => state.loader.categoryListApi);
 
 
-    const products = useSelector(state => state.api.products);
+    const data = useSelector(state => state.api.products);
+    const {products, total} = data
+    console.log(products);
+    console.log(total);
+    // console.log(total);
+    
     const categoriesList = useSelector(state => state.api.categoryList);
+    const searchValue = useSelector(state => state.api.search);
     const dispatch = useDispatch();
     const loader = useSelector(state => state.loader.AllProductsApi);
+    console.log(searchValue);
 
 
     useEffect(() => {
-        if (categorySlug !== "all") {
-            dispatch(getProductByCategories(categorySlug));
+
+        if (searchValue) {
+
+            dispatch(getProductBySearch(searchValue));
         } else {
-            dispatch(getAllProducts());
+
+            if (categorySlug !== "all") {
+                dispatch(getProductByCategories(categorySlug));
+            } else {
+                dispatch(getAllProducts());
+            }
         }
-    }, [dispatch, categorySlug]);
+    }, [dispatch, categorySlug, searchValue]);
 
     useEffect(() => {
         if (categoriesList.length > 0) {
@@ -77,9 +91,10 @@ const ProductsPage = () => {
                     {loader && <div className='w-[100%] h-screen flex items-center justify-center'>
                         <CircularProgress color="inherit" />
                     </div>}
-                    {!loader && <> <h1 className='text-4xl font-semibold my-3'>{categorySlug.charAt(0).toUpperCase() + categorySlug.slice(1)}</h1>
+                    {!loader && <> <h1 className='text-4xl font-semibold my-3'>{searchValue || categorySlug.charAt(0).toUpperCase() + categorySlug.slice(1)}</h1>
 
                         <div className='flex flex-wrap gap-3 p-2'>
+                            {total === 0 && "Product Not Found"}
                             {products?.map((item) => {
                                 return <Card key={item.id} {...item} />
 
