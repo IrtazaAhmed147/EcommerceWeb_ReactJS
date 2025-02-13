@@ -38,7 +38,7 @@ export const getCategoriesList = async () => {
 
 export const getProductByCategories = async (category = "beauty") => {
     try {
-        const response = await fetch(`https://dummyjson.com/products/category/${category}?select=title,price,images`)
+        const response = await fetch(`https://dummyjson.com/products/category/${category}?select=title,price,images,discountPercentage`)
         const data = await response.json()
 
         return data
@@ -62,7 +62,7 @@ export const getAllProducts = async () => {
 
 }
 
-export const getSingleProduct = async(id = 3)=> {
+export const getSingleProduct = async (id = 3) => {
     try {
         const response = await fetch(`https://dummyjson.com/products/${id}`)
         const data = await response.json()

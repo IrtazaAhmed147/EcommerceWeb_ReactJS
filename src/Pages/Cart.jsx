@@ -66,8 +66,8 @@ const Cart = () => {
                             $650
                         </td>
                     </tr>
-                  
-                   
+
+
                 </tbody>
             </table>
 
@@ -97,7 +97,7 @@ const Cart = () => {
                     </div>
                     <div className='flex justify-center'>
 
-                    <Button style={{ backgroundColor: "var(--button2)", margin:"auto" }} variant="contained">Proceed To Checkout</Button>
+                        <Button style={{ backgroundColor: "var(--button2)", margin: "auto" }} variant="contained">Proceed To Checkout</Button>
                     </div>
                 </div>
 

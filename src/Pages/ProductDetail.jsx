@@ -6,7 +6,7 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import { Button } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
-import { useParams } from 'react-router';
+import { Link, useParams } from 'react-router';
 import { getSingleProduct } from '../Utils/Api';
 
 const ProductDetail = () => {
@@ -45,7 +45,11 @@ const ProductDetail = () => {
     return (
         <>
             <div className='py-15 w-[85%] m-auto'>
-                <p className='text-neutral-500'>{category} / <span className='text-black'>{title}</span></p>
+                <p className='text-neutral-500'>
+                    <Link to={`/products/category/${category}`}>
+                    {category} 
+                    </Link>
+                    / <span className='text-black'>{title}</span></p>
             </div>
 
             <div className='w-[85%] m-auto flex gap-5 flex-wrap mb-5'>
