@@ -1,0 +1,18 @@
+@import "tailwindcss";
+
+*{
+  font-family: "Afacad Flux", serif !important;
+}
+
+:root{
+  --primary1: #363738;
+  --secondary: #F5F5F5;
+  --secondary1: #FEFAF1;
+  --secondary2: #DB4444;
+  --text: #FAFAFA;
+  --text1: #7D8184;
+  --button1: #00FF66;
+  --button2: #DB4444;
+  --hover-button: #E07575;
+  --hover-button-blue: #A0BCE0;
+}
