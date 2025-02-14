@@ -12,17 +12,17 @@ const ProductsPage = () => {
 
     const { categorySlug } = useParams()
     const listLoader = useSelector(state => state.loader.categoryListApi);
-
+    const wishlistProduct = useSelector(state => state.wishlist.wishlistProducts)
 
     const data = useSelector(state => state.api.products);
-    const {products, total} = data
-    
-    
+    const { products, total } = data
+
+    const isInWishlist = (id) => wishlistProduct.some((item) => item.id === id);
     const categoriesList = useSelector(state => state.api.categoryList);
     const searchValue = useSelector(state => state.api.search);
     const dispatch = useDispatch();
     const loader = useSelector(state => state.loader.AllProductsApi);
-   
+
 
 
     useEffect(() => {
@@ -62,12 +62,14 @@ const ProductsPage = () => {
                             </div>
                         </>}
 
-                        {!listLoader && <>
+                        {navigator.onLine && !listLoader && <>
                             <li className='duration-[0.5s] transition-all ease-in-out flex justify-between w-[160px] px-2 rounded-md hover:bg-neutral-200 cursor-pointer'>
-                                <p>All</p>
-                                <p className='hidden'>
-                                    <NavigateNextIcon />
-                                </p>
+                                <Link to={"/products/category/all"}>
+                                    <p>All</p>
+                                    <p className='hidden'>
+                                        <NavigateNextIcon />
+                                    </p>
+                                </Link>
                             </li>
                             {categoriesList?.map((category) => {
                                 return <li key={category.name} onClick={() => dispatch(getProductByCategories(category.slug))} className='duration-[0.5s] transition-all ease-in-out flex justify-between w-[160px] px-2 rounded-md hover:bg-neutral-200 cursor-pointer'>
@@ -85,16 +87,17 @@ const ProductsPage = () => {
 
                     </ul>
                 </div>
-                <div className='w-[100%] md:w-[75%] px-3 my-5 m-auto' >
+                <div className='w-[100%] md:w-[75%] px-3 my-5 m-auto min-h-screen' >
                     {loader && <div className='w-[100%] h-screen flex items-center justify-center'>
                         <CircularProgress color="inherit" />
                     </div>}
                     {!loader && <> <h1 className='text-4xl font-semibold my-3'>{searchValue || categorySlug.charAt(0).toUpperCase() + categorySlug.slice(1)}</h1>
+                        {!navigator.onLine && <h1 className='text-red-800 text-2xl my-5'>No Internet Connection</h1>}
 
-                        <div className='flex flex-wrap gap-3 p-2'>
+                        <div className='flex flex-wrap md:gap-3 p-2'>
                             {total === 0 && "Product Not Found"}
                             {products?.map((item) => {
-                                return <Card key={item.id} {...item} />
+                                return <Card key={item.id} {...item} wishlist={isInWishlist(item.id)}  />
 
                             })}
                         </div> </>}

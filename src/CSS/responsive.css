@@ -1,0 +1,27 @@
+@media screen and (max-width: 600px) {
+    .card-box{
+        width: 148px !important;
+        height: 260px !important;
+    }
+    .card-image-box{
+        height: 158px !important;
+    }
+}
+@media screen and (max-width: 500px) {
+    .card-box{
+        width: 130px !important;
+        height: auto !important;
+    }
+    .card-image-box{
+        height: 140px !important;
+    }
+}
+@media screen and (max-width: 400px) {
+    .card-box{
+        width: 130px !important;
+        height: auto !important;
+    }
+    .card-image-box{
+        height: 140px !important;
+    }
+}

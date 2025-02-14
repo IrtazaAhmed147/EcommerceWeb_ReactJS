@@ -37,13 +37,14 @@ const Home = () => {
         dispatch(getCategoriesList())
     }, [dispatch])
 
+    
+
 
     return (
         <>
             <div className='flex w-full'>
                 <div className='w-[25%] lg:w-[20%] border-r pt-7 pe-4  justify-end hidden md:flex'>
                     <ul className='flex flex-col gap-[10px]'>
-
                         {categoriesListLoader && <>
                             <div className='w-[150px] h-[400px] flex items-center justify-center'>
                                 <CircularProgress color="inherit" />
@@ -75,7 +76,7 @@ const Home = () => {
                     <h3 className='text-red-900 '>Groceries</h3>
                 </div>
                 <div className='flex justify-center w-full gap-3 flex-wrap min-h-[300px] items-center'>
-
+                {!navigator.onLine && <h1 className='text-red-800 text-xl'>No Internet Connection</h1>}
                     {todayLoader && <CircularProgress color="inherit" />}
 
                     {!todayLoader && todayProducts?.map((item) => {
@@ -116,6 +117,7 @@ const Home = () => {
                 </div>
                 <h1 className='text-4xl font-bold'>Explore Our Products</h1>
                 <div className='flex justify-center w-full gap-3 flex-wrap min-h-[300px] items-center'>
+                {!navigator.onLine && <h1 className='text-red-800 text-xl'>No Internet Connection</h1>}
                     {loader && <CircularProgress color="inherit" />}
                     {!loader && products?.map((item) => {
                         return <Card key={item.id} {...item} />

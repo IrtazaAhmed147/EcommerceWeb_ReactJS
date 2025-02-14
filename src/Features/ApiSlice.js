@@ -9,7 +9,7 @@ export const getApi = createSlice({
         homeProducts: [],
         todayProducts: [],
         singleProduct: {},
-        search: "",
+        search: JSON.parse(localStorage.getItem("searchVal")) || "",
     },
     reducers: {
         setProducts: (state, action) => {
@@ -29,12 +29,18 @@ export const getApi = createSlice({
         },
         setSearch: (state, action) => {
             state.search = action.payload
+            localStorage.setItem("searchVal", JSON.stringify(state.search))
+
+        }, 
+        emptySearch:(state)=> {
+            state.search = ""
+            localStorage.setItem("searchVal", JSON.stringify(state.search))
         }
     }
 })
 
 
-export const { setProducts, setCategoryList, setHomeProducts, setTodayProducts, setSingleProduct, setSearch } = getApi.actions
+export const { setProducts, setCategoryList, setHomeProducts, setTodayProducts, setSingleProduct, setSearch,emptySearch } = getApi.actions
 export default getApi.reducer
 
 
@@ -43,9 +49,9 @@ export default getApi.reducer
 export const getAllProducts = () => async (dispatch) => {
 
     dispatch(setApiLoading({ apiName: "AllProductsApi", isLoading: true }));
-
+    dispatch(emptySearch())
     try {
-        const response = await fetch('https://dummyjson.com/products?limit=20&select=title,price,rating,images,discountPercentage')
+        const response = await fetch('https://dummyjson.com/products?limit=20&select=title,price,rating,thumbnail,discountPercentage')
         const data = await response.json()
         dispatch(setApiLoading({ apiName: "AllProductsApi", isLoading: false }));
         dispatch(setProducts(data))
@@ -74,7 +80,9 @@ export const getCategoriesList = () => async (dispatch) => {
 }
 
 export const getProductByCategories = (category = "beauty") => async (dispatch) => {
+
     dispatch(setApiLoading({ apiName: "AllProductsApi", isLoading: true }));
+    dispatch(emptySearch())
     try {
         const response = await fetch(`https://dummyjson.com/products/category/${category}?select=title,price,thumbnail,discountPercentage`)
         const data = await response.json()

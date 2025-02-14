@@ -1,13 +1,15 @@
 import React, { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux';
 import { deleteCartItem, subTotalPrice, updateQuantity } from '../Features/CartSlice';
-import {  Button } from '@mui/material'
+import { Button } from '@mui/material'
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import { ToastContainer } from 'react-toastify';
 import { notify } from '../Utils/HelperFunctions';
 import { Link } from 'react-router';
 const Cart = () => {
 
+
+    
     const dispatch = useDispatch();
 
     const cartItems = useSelector(state => state.cart.items)
@@ -19,19 +21,21 @@ const Cart = () => {
         dispatch(updateQuantity({ id, quantity: newQuantity }));
 
     };
+    const handleDelete = (id) => {
+        dispatch(deleteCartItem(id))
+        notify("error", "Product Remove From Cart")
+    }
+    
     useEffect(() => {
         dispatch(subTotalPrice())
     }, [cartItems])
 
-    const handleDelete = (id)=> {
-        dispatch(deleteCartItem(id))
-        notify("error", "Product Deleted")
-    }
+    if (!navigator.onLine) return <div className='h-screen'>  <h1 className='text-red-800 text-2xl m-5'>No Internet Connection</h1> </div>
 
     return (
         <>
 
-<ToastContainer
+            <ToastContainer
                 position="top-right"
                 autoClose={5000}
                 hideProgressBar={false}
@@ -42,7 +46,7 @@ const Cart = () => {
                 draggable
                 pauseOnHover
                 theme="light"
-              />
+            />
 
             <div className='py-15 w-[90%] m-auto'>
                 <p className='text-neutral-500'>Home / <span className='text-black'>Cart</span></p>
@@ -64,11 +68,11 @@ const Cart = () => {
                     {cartItems?.map((product) => {
                         return <tr key={product.id}>
                             <td className='flex gap-2 items-center ps-1 sm:ps-6'>
-                                
 
-                                    <img className='w-[40px] sm:w-[54px]' src={product.thumbnail} alt="" />
+
+                                <img className='w-[40px] sm:w-[54px]' src={product.thumbnail} alt="" />
                                 <Link to={`/product/${product.id}`}>
-                                <p className='text-[11px] sm:text-[16px]'>{product.title}</p>
+                                    <p className='text-[11px] sm:text-[16px]'>{product.title}</p>
                                 </Link>
                             </td>
                             <td className='text-[11px] sm:text-[16px]'>${product.discountedPrice}</td>
@@ -81,7 +85,7 @@ const Cart = () => {
                                 ${product.totalPrice}
                             </td>
                             <td className='text-[11px] sm:text-[16px]'>
-                                <DeleteOutlineIcon onClick={()=> handleDelete(product.id)} style={{cursor: "pointer"}}/>
+                                <DeleteOutlineIcon onClick={() => handleDelete(product.id)} style={{ cursor: "pointer" }} />
                             </td>
                         </tr>
                     })}

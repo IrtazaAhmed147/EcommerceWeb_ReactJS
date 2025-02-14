@@ -24,6 +24,7 @@ const Navbar = () => {
     const inputRes = React.useRef(null)
 
     const cartItems = useSelector(state => state.cart.items)
+    const wishlistProduct = useSelector(state => state.wishlist.wishlistProducts)
 
     const dispatch = useDispatch()
     const navigate = useNavigate()
@@ -191,12 +192,12 @@ const Navbar = () => {
 
 
                             <Link to="/wishlist">
-                                <Badge badgeContent={1} color="secondary">
+                                <Badge badgeContent={wishlistProduct?.length || 0} color="secondary">
                                     <FavoriteBorderIcon />
                                 </Badge>
                             </Link>
                             <Link to="/cart">
-                                <Badge badgeContent={cartItems.length} color="secondary">
+                                <Badge badgeContent={cartItems?.length || 0} color="secondary">
                                     <ShoppingCartIcon />
                                 </Badge>
                             </Link>
