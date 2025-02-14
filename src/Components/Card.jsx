@@ -6,7 +6,7 @@ import { Link } from 'react-router';
 // import { getHomeProducts } from '../Utils/Api';
 const Card = (props) => {
 
-    const { id, title, images, rating, price, discountPercentage } = props
+    const { id, title, thumbnail, rating, price, discountPercentage } = props
 
     let discountedPrice = price - (price * (discountPercentage / 100))
 
@@ -28,7 +28,7 @@ const Card = (props) => {
                             <VisibilityIcon style={{ width: "18px", height: "18px" }} />
                         </Link>
                     </div>
-                    <img className='w-full h-full' src={images[0]} alt="" />
+                    <img className='w-full h-full' src={thumbnail} alt="" />
                 </div>
                 <div className='flex flex-col '>
                     <h4>{title}</h4>

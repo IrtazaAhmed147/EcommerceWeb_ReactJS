@@ -3,6 +3,9 @@ import { useSelector, useDispatch } from 'react-redux';
 import { deleteCartItem, subTotalPrice, updateQuantity } from '../Features/CartSlice';
 import {  Button } from '@mui/material'
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import { ToastContainer } from 'react-toastify';
+import { notify } from '../Utils/HelperFunctions';
+import { Link } from 'react-router';
 const Cart = () => {
 
     const dispatch = useDispatch();
@@ -22,10 +25,25 @@ const Cart = () => {
 
     const handleDelete = (id)=> {
         dispatch(deleteCartItem(id))
+        notify("error", "Product Deleted")
     }
 
     return (
         <>
+
+<ToastContainer
+                position="top-right"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick={false}
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="light"
+              />
+
             <div className='py-15 w-[90%] m-auto'>
                 <p className='text-neutral-500'>Home / <span className='text-black'>Cart</span></p>
             </div>
@@ -49,17 +67,18 @@ const Cart = () => {
                                 
 
                                     <img className='w-[40px] sm:w-[54px]' src={product.thumbnail} alt="" />
-                                
+                                <Link to={`/product/${product.id}`}>
                                 <p className='text-[11px] sm:text-[16px]'>{product.title}</p>
+                                </Link>
                             </td>
-                            <td className='text-[11px] sm:text-[16px]'>{product.discountedPrice}</td>
+                            <td className='text-[11px] sm:text-[16px]'>${product.discountedPrice}</td>
                             <td>
                                 <div className='p-1 border-1 rounded-sm w-[30px] sm:w-[50px] flex h-[28px] sm:h-[35px]'>
                                     <input min={"1"} max={"10"} type="number" onChange={(e) => handleQuantityChange(e, product.id)} value={product.quantity} className='w-[100%] outline-none text-[11px] sm:text-[16px]' />
                                 </div>
                             </td>
                             <td className='text-[11px] sm:text-[16px]'>
-                                {product.totalPrice}
+                                ${product.totalPrice}
                             </td>
                             <td className='text-[11px] sm:text-[16px]'>
                                 <DeleteOutlineIcon onClick={()=> handleDelete(product.id)} style={{cursor: "pointer"}}/>
@@ -79,7 +98,7 @@ const Cart = () => {
                 <div className='flex gap-3  h-[50px]'>
 
                     <input className='border-1 px-2 py-1 w-[200px] outline-none rounded-sm' type="text" placeholder='Coupon Code' />
-                    <Button style={{ backgroundColor: "var(--button2)" }} variant="contained">View All Products</Button>
+                    <Button style={{ backgroundColor: "var(--button2)" }} variant="contained">Apply Coupon</Button>
                 </div>
 
                 <div className='border-1 px-2 py-3 w-[300px] rounded-sm lg:w-[400px]'>

@@ -38,12 +38,6 @@ const Home = () => {
     }, [dispatch])
 
 
-
-
-
-    console.log(todayProducts);
-
-
     return (
         <>
             <div className='flex w-full'>

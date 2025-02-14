@@ -15,6 +15,7 @@ export const cartSlice = createSlice({
         },
         updateQuantity: (state, action) => {
             const { id, quantity } = action.payload;
+
             state.items = state.items.map((item) =>
                 item.id === id ? { ...item, quantity, totalPrice: (quantity * (item.discountedPrice)).toFixed(2) } : item
             );

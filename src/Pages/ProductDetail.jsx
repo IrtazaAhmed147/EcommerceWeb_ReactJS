@@ -9,7 +9,9 @@ import RemoveIcon from '@mui/icons-material/Remove';
 import { Link, useParams } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 import { getSingleProduct } from '../Features/ApiSlice';
-import { addToCart } from '../Features/CartSlice';
+import { addToCart, updateQuantity } from '../Features/CartSlice';
+import { toast, ToastContainer } from 'react-toastify';
+import { notify } from '../Utils/HelperFunctions';
 
 const ProductDetail = () => {
 
@@ -19,8 +21,9 @@ const ProductDetail = () => {
 
 
     const singleProduct = useSelector(state => state.api.singleProduct);
-    const loader = useSelector(state => state.loader.singleProductApi);
-    const items = useSelector(state => state.cart.items);
+    const loader = useSelector(state => state.loader.AllProductsApi);
+
+    const cartItems = useSelector(state => state.cart.items)
     const [quantity, setQuantity] = useState(1)
 
     useEffect(() => {
@@ -31,8 +34,18 @@ const ProductDetail = () => {
 
     let discountedPrice = (price - (price * (discountPercentage / 100))).toFixed(2)
 
-    const addToCartFunc = () => {
+    
 
+    const addToCartFunc = () => {
+        
+        
+        const existingProduct = cartItems.find((item)=> item.id === parseInt(productId))
+        
+        if (existingProduct) {
+            dispatch(updateQuantity({id: parseInt(productId), quantity}))
+            notify("success", "Product Quantity Update")
+            return
+        }
 
         const item = {
             id: parseInt(productId),
@@ -47,6 +60,8 @@ const ProductDetail = () => {
         }
         dispatch(addToCart(item))
 
+        notify("success", "Product Added")
+
     }
 
 
@@ -59,6 +74,19 @@ const ProductDetail = () => {
 
     return (
         <>
+
+            <ToastContainer
+                position="top-right"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick={false}
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="light"
+              />
 
 
 

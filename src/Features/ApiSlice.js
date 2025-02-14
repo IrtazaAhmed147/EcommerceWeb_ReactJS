@@ -76,7 +76,7 @@ export const getCategoriesList = () => async (dispatch) => {
 export const getProductByCategories = (category = "beauty") => async (dispatch) => {
     dispatch(setApiLoading({ apiName: "AllProductsApi", isLoading: true }));
     try {
-        const response = await fetch(`https://dummyjson.com/products/category/${category}?select=title,price,images,discountPercentage`)
+        const response = await fetch(`https://dummyjson.com/products/category/${category}?select=title,price,thumbnail,discountPercentage`)
         const data = await response.json()
         dispatch(setApiLoading({ apiName: "AllProductsApi", isLoading: false }));
         dispatch(setProducts(data))
@@ -109,7 +109,7 @@ export const getProductBySearch = (input = "ball") => async (dispatch) => {
 export const getHomeProducts = () => async (dispatch) => {
     dispatch(setApiLoading({ apiName: "HomeProductsApi", isLoading: true }));
     try {
-        const response = await fetch("https://dummyjson.com/products?limit=8&skip=90&select=title,price,rating,images,discountPercentage")
+        const response = await fetch("https://dummyjson.com/products?limit=8&skip=90&select=title,price,rating,thumbnail,discountPercentage")
         const data = await response.json()
         dispatch(setApiLoading({ apiName: "HomeProductsApi", isLoading: false }));
         dispatch(setHomeProducts(data))
@@ -127,7 +127,7 @@ export const todaysProductApi = () => async (dispatch) => {
     let randomNum = Math.floor(Math.random() * 21)
     dispatch(setApiLoading({ apiName: "AllProductsApi", isLoading: true }));
     try {
-        const response = await fetch(`https://dummyjson.com/products/category/groceries?limit=4&skip=${randomNum}&select=title,price,rating,images,discountPercentage`)
+        const response = await fetch(`https://dummyjson.com/products/category/groceries?limit=4&skip=${randomNum}&select=title,price,rating,thumbnail,discountPercentage`)
         const data = await response.json()
 
         dispatch(setApiLoading({ apiName: "AllProductsApi", isLoading: false }));

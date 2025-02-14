@@ -8,5 +8,5 @@ export const store = configureStore({
         api: apiReducer,
         loader: loaderSlice,
         cart: cartSlice,
-    }
+        }
 })
