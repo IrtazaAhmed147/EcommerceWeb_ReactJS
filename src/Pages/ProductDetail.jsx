@@ -29,7 +29,7 @@ const ProductDetail = () => {
 
     const { title, description, category, brand, rating, dimensions, reviews, returnPolicy, warrantyInformation, images, price, discountPercentage, thumbnail } = singleProduct
 
-    let discountedPrice = price - (price * (discountPercentage / 100))
+    let discountedPrice = (price - (price * (discountPercentage / 100))).toFixed(2)
 
     const addToCartFunc = () => {
 
@@ -43,6 +43,7 @@ const ProductDetail = () => {
             discountPercentage,
             quantity: quantity,
             discountedPrice,
+            totalPrice: (quantity * (discountedPrice)).toFixed(2),
         }
         dispatch(addToCart(item))
 
@@ -94,7 +95,7 @@ const ProductDetail = () => {
 
                         })}
                     </p>
-                    <p className='text-xl font-semibold mb-4'>${discountedPrice.toFixed(2)} <span className='line-through text-neutral-300'>${price}</span></p>
+                    <p className='text-xl font-semibold mb-4'>${discountedPrice} <span className='line-through text-neutral-300'>${price}</span></p>
                     <p>{description}</p>
                     <p className='mb-3'>Brand: <span className='font-semibold'>{brand}</span></p>
                     <h1 className='text-xl font-semibold'>Dimensions</h1>

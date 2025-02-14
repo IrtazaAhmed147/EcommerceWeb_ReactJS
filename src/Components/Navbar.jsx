@@ -14,7 +14,7 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import Badge from '@mui/material/Badge';
 import { Link, useNavigate } from 'react-router';
 import { setSearch } from '../Features/ApiSlice';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 const Navbar = () => {
 
@@ -22,6 +22,8 @@ const Navbar = () => {
     const pages = ['Home', 'Contact', 'About'];
     const input = React.useRef(null)
     const inputRes = React.useRef(null)
+
+    const cartItems = useSelector(state => state.cart.items)
 
     const dispatch = useDispatch()
     const navigate = useNavigate()
@@ -194,7 +196,7 @@ const Navbar = () => {
                                 </Badge>
                             </Link>
                             <Link to="/cart">
-                                <Badge badgeContent={1} color="secondary">
+                                <Badge badgeContent={cartItems.length} color="secondary">
                                     <ShoppingCartIcon />
                                 </Badge>
                             </Link>
