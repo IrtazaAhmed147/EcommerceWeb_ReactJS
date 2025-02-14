@@ -9,6 +9,7 @@ import RemoveIcon from '@mui/icons-material/Remove';
 import { Link, useParams } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 import { getSingleProduct } from '../Features/ApiSlice';
+import { addToCart } from '../Features/CartSlice';
 
 const ProductDetail = () => {
 
@@ -19,16 +20,37 @@ const ProductDetail = () => {
 
     const singleProduct = useSelector(state => state.api.singleProduct);
     const loader = useSelector(state => state.loader.singleProductApi);
+    const items = useSelector(state => state.cart.items);
+    const [quantity, setQuantity] = useState(1)
 
     useEffect(() => {
         dispatch(getSingleProduct(productId))
     }, [dispatch])
 
-
-
-    const { title, description, category, brand, rating, dimensions, reviews, returnPolicy, warrantyInformation, images, price, discountPercentage } = singleProduct
+    const { title, description, category, brand, rating, dimensions, reviews, returnPolicy, warrantyInformation, images, price, discountPercentage, thumbnail } = singleProduct
 
     let discountedPrice = price - (price * (discountPercentage / 100))
+
+    const addToCartFunc = () => {
+
+
+        const item = {
+            id: parseInt(productId),
+            title,
+            price,
+            category,
+            thumbnail,
+            discountPercentage,
+            quantity: quantity,
+            discountedPrice,
+        }
+        dispatch(addToCart(item))
+
+    }
+
+
+
+
 
     if (loader) return <div className='w-full flex justify-center items-center h-screen'>
         <CircularProgress color="inherit" />
@@ -84,11 +106,11 @@ const ProductDetail = () => {
                     <div className='flex gap-2 mt-6'>
                         <div className='flex'>
 
-                            <div style={{ borderTopLeftRadius: "4px", borderBottomLeftRadius: "4px" }} className='border-1 flex items-center justify-center px-2 py-1 cursor-pointer'><RemoveIcon /></div>
-                            <div className='border-1 flex items-center justify-center px-7 py-2'>1</div>
-                            <button style={{ borderTopRightRadius: "4px", borderBottomRightRadius: "4px" }} className='border-1 flex items-center justify-center px-2 py-1 cursor-pointer'><AddIcon /></button>
+                            <button onClick={() => setQuantity(prev => prev - 1)} style={{ borderTopLeftRadius: "4px", borderBottomLeftRadius: "4px" }} className='border-1 flex items-center justify-center px-2 py-1 cursor-pointer'><RemoveIcon /></button>
+                            <div className='border-1 flex items-center justify-center px-7 py-2'>{quantity}</div>
+                            <button onClick={() => setQuantity(prev => prev + 1)} style={{ borderTopRightRadius: "4px", borderBottomRightRadius: "4px" }} className='border-1 flex items-center justify-center px-2 py-1 cursor-pointer'><AddIcon /></button>
                         </div>
-                        <Button style={{ backgroundColor: "var(--button2)", margin: "auto", cursor: "pointer", padding: "8px 40px" }} variant="contained">Buy Now</Button>
+                        <Button style={{ backgroundColor: "var(--button2)", margin: "auto", cursor: "pointer", padding: "8px 40px" }} variant="contained" onClick={addToCartFunc}>Add To Cart</Button>
                         <div className='border-2 flex items-center justify-center rounded-md p-1 px-3 cursor-pointer'>
                             <FavoriteBorderIcon />
                         </div>

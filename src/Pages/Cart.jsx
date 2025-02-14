@@ -1,7 +1,20 @@
-import { Button } from '@mui/material'
 import React from 'react'
+import { useSelector, useDispatch } from 'react-redux';
+import { updateQuantity } from '../Features/CartSlice';
+import { Button } from '@mui/material'
 
 const Cart = () => {
+
+    const dispatch = useDispatch();
+
+    const cartItems = useSelector(state => state.cart.items)
+
+    const handleQuantityChange = (e, id) => {
+        const newQuantity = parseInt(e.target.value, 10) || 1;
+        dispatch(updateQuantity({ id, quantity: newQuantity }));
+    };
+    
+    
     return (
         <>
             <div className='py-15 w-[85%] m-auto'>
@@ -21,51 +34,24 @@ const Cart = () => {
                 </thead>
                 <tbody>
 
-                    <tr>
-                        <td className='flex gap-2 items-center ps-1 sm:ps-6'>
-                            <img className='w-[40px] sm:w-[54px]' src="https://cdn.dummyjson.com/products/images/sunglasses/Black%20Sun%20Glasses/thumbnail.png" alt="" />
-                            <p className='text-[11px] sm:text-[16px]'>Sun Glasses</p>
-                        </td>
-                        <td className='text-[11px] sm:text-[16px]'>$650</td>
-                        <td>
-                            <div className='p-1 border-1 rounded-sm w-[30px] sm:w-[50px] flex h-[28px] sm:h-[35px]'>
-                                <input type="number" className='w-[100%] outline-none text-[11px] sm:text-[16px]' />
-                            </div>
-                        </td>
-                        <td className='text-[11px] sm:text-[16px]'>
-                            $650
-                        </td>
-                    </tr>
-                    <tr>
-                        <td className='flex gap-2 items-center ps-1 sm:ps-6'>
-                            <img className='w-[40px] sm:w-[54px]' src="https://cdn.dummyjson.com/products/images/sunglasses/Black%20Sun%20Glasses/thumbnail.png" alt="" />
-                            <p className='text-[11px] sm:text-[16px]'>Sun Glasses</p>
-                        </td>
-                        <td className='text-[11px] sm:text-[16px]'>$650</td>
-                        <td>
-                            <div className='p-1 border-1 rounded-sm w-[30px] sm:w-[50px] flex h-[28px] sm:h-[35px]'>
-                                <input type="number" className='w-[100%] outline-none text-[11px] sm:text-[16px]' />
-                            </div>
-                        </td>
-                        <td className='text-[11px] sm:text-[16px]'>
-                            $650
-                        </td>
-                    </tr>
-                    <tr>
-                        <td className='flex gap-2 items-center ps-1 sm:ps-6'>
-                            <img className='w-[40px] sm:w-[54px]' src="https://cdn.dummyjson.com/products/images/sunglasses/Black%20Sun%20Glasses/thumbnail.png" alt="" />
-                            <p className='text-[11px] sm:text-[16px]'>Sun Glasses and mobile phone</p>
-                        </td>
-                        <td className='text-[11px] sm:text-[16px]'>$650</td>
-                        <td>
-                            <div className='p-1 border-1 rounded-sm w-[30px] sm:w-[50px] flex h-[28px] sm:h-[35px]'>
-                                <input type="number" className='w-[100%] outline-none text-[11px] sm:text-[16px]' />
-                            </div>
-                        </td>
-                        <td className='text-[11px] sm:text-[16px]'>
-                            $650
-                        </td>
-                    </tr>
+                    {cartItems?.map((product) => {
+                        return <tr key={product.id}>
+                            <td className='flex gap-2 items-center ps-1 sm:ps-6'>
+                                <img className='w-[40px] sm:w-[54px]' src={product.thumbnail} alt="" />
+                                <p className='text-[11px] sm:text-[16px]'>{product.title}</p>
+                            </td>
+                            <td className='text-[11px] sm:text-[16px]'>{product.discountedPrice.toFixed(2)}</td>
+                            <td>
+                                <div className='p-1 border-1 rounded-sm w-[30px] sm:w-[50px] flex h-[28px] sm:h-[35px]'>
+                                    <input min={"1"} max={"10"} type="number" onChange={(e) => handleQuantityChange(e, product.id)} value={product.quantity} className='w-[100%] outline-none text-[11px] sm:text-[16px]' />
+                                </div>
+                            </td>
+                            <td className='text-[11px] sm:text-[16px]'>
+                                {(product.quantity * (product.discountedPrice).toFixed(2)).toFixed(2)}
+                            </td>
+                        </tr>
+                    })}
+
 
 
                 </tbody>

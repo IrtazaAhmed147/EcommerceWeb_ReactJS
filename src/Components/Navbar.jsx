@@ -21,6 +21,7 @@ const Navbar = () => {
 
     const pages = ['Home', 'Contact', 'About'];
     const input = React.useRef(null)
+    const inputRes = React.useRef(null)
 
     const dispatch = useDispatch()
     const navigate = useNavigate()
@@ -37,17 +38,29 @@ const Navbar = () => {
         setAnchorElNav(null);
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = (e, size) => {
         e.preventDefault()
-        console.log(input.current.value);
+        if (size === "desktop") {
+            inputRes.current.value = ""
+            if (!input.current.value.trim()) {
+                return
+            }
 
-        if (!input.current.value.trim()) {
-            return
+            dispatch(setSearch(input.current.value));
+            input.current.value = ""
+            navigate(`/products/category/all`)
+        } else if (size === "phone") {
+            input.current.value = ""
+            if (!inputRes.current.value.trim()) {
+                return
+            }
+
+
+            dispatch(setSearch(inputRes.current.value));
+            inputRes.current.value = ""
+            navigate(`/products/category/all`)
         }
 
-        dispatch(setSearch(input.current.value));
-        input.current.value = ""
-        navigate(`/products/category/all`)
 
 
     }
@@ -156,7 +169,7 @@ const Navbar = () => {
                         </Box>
                         <Box sx={{ flexGrow: 0, display: "flex", justifyContent: "center", alignItems: "center", gap: "20px" }}>
 
-                            <form className="hidden items-center max-w-sm mx-auto md:flex w-[300px]" onSubmit={handleSubmit}>
+                            <form className="hidden items-center max-w-sm mx-auto md:flex w-[300px]" onSubmit={(e) => handleSubmit(e, "desktop")}>
                                 <label htmlFor="simple-search" className="sr-only">Search</label>
                                 <div className="relative w-full">
                                     <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
@@ -164,7 +177,7 @@ const Navbar = () => {
                                             <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 5v10M3 5a2 2 0 1 0 0-4 2 2 0 0 0 0 4Zm0 10a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm12 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm0 0V6a3 3 0 0 0-3-3H9m1.5-2-2 2 2 2" />
                                         </svg>
                                     </div>
-                                    <input ref={input} type="text" id="simple-search" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:outline-none focus:ring-neutral-500  block w-full ps-10 p-2.5" placeholder="What are you looking for?" required />
+                                    <input ref={input} type="text" id="simple-search" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:outline-none focus:ring-neutral-500  block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-neutral-500 dark:focus:border-neutral-500" placeholder="What are you looking for?" required />
                                 </div>
                                 <button type="submit" className="cursor-pointer p-2.5 ms-2 text-sm font-medium text-black bg-neutral-300 rounded-lg border border-neutral-300 hover:bg-neutral-400 focus:outline-none  ">
                                     <svg className="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
@@ -187,7 +200,7 @@ const Navbar = () => {
                             </Link>
 
                         </Box>
-                        <form className="flex items-center mx-auto md:hidden w-[100%] mb-2" onSubmit={handleSubmit}>
+                        <form className="flex items-center mx-auto md:hidden w-[100%] mb-2" onSubmit={(e) => handleSubmit(e, "phone")}>
                             <label htmlFor="simple-search" className="sr-only">Search</label>
                             <div className="relative w-full">
                                 <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
@@ -195,7 +208,7 @@ const Navbar = () => {
                                         <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 5v10M3 5a2 2 0 1 0 0-4 2 2 0 0 0 0 4Zm0 10a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm12 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm0 0V6a3 3 0 0 0-3-3H9m1.5-2-2 2 2 2" />
                                     </svg>
                                 </div>
-                                <input ref={input} type="text" id="simple-search" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:outline-none focus:ring-neutral-500  block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-neutral-500 dark:focus:border-neutral-500" placeholder="What are you looking for?" required />
+                                <input ref={inputRes} type="text" id="simple-search" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:outline-none focus:ring-neutral-500  block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-neutral-500 dark:focus:border-neutral-500" placeholder="What are you looking for?" required />
                             </div>
                             <button type="submit" className="p-2.5 ms-2 text-sm font-medium text-black bg-neutral-300 rounded-lg border border-neutral-300 hover:bg-neutral-400 focus:outline-none  ">
                                 <svg className="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">

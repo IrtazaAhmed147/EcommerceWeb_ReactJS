@@ -3,8 +3,6 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
     categoryListApi: false,
     HomeProductsApi: false,
-    todayProductApi: false,
-    singleProductApi: false,
     AllProductsApi: false,
 };
 

@@ -16,15 +16,13 @@ const ProductsPage = () => {
 
     const data = useSelector(state => state.api.products);
     const {products, total} = data
-    console.log(products);
-    console.log(total);
-    // console.log(total);
+    
     
     const categoriesList = useSelector(state => state.api.categoryList);
     const searchValue = useSelector(state => state.api.search);
     const dispatch = useDispatch();
     const loader = useSelector(state => state.loader.AllProductsApi);
-    console.log(searchValue);
+   
 
 
     useEffect(() => {
