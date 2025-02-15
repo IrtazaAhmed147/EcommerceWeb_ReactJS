@@ -4,41 +4,32 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import { Link } from 'react-router';
 import "../CSS/responsive.css"
-import { addToWishlist, deleteWishlistProduct } from '../Features/WishlistSlice';
+import { addToWishlist, deleteWishlistProduct, isExistInWishlist } from '../Features/WishlistSlice';
 import { notify } from '../Utils/HelperFunctions';
 import { ToastContainer } from 'react-toastify';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 const Card = (props) => {
 
     const { id, title, thumbnail, rating, price, discountPercentage } = props
-   
+    const wishlistProducts = useSelector(state => state.wishlist.wishlistProducts);
+    const isExist = wishlistProducts.some(product => product.id === id);
+
     let discountedPrice = price - (price * (discountPercentage / 100))
     const dispatch = useDispatch()
 
-    const AddToWishlistFunc = () => {
-
-        const item = {
-            id,
-            title,
-            price,
-            rating,
-            thumbnail,
-            discountPercentage,
-            discountedPrice,
-            wishlist: true
+    const AddToWishlistFunc = async () => {
+        if (isExist) {
+            dispatch(deleteWishlistProduct(id));
+            notify("info", "Product Removed From Wishlist");
+        } else {
+            const item = { id, title, price, rating, thumbnail, discountPercentage, discountedPrice, wishlist: true };
+            dispatch(addToWishlist(item));
+            notify("success", "Product Added To Wishlist");
         }
-        dispatch(addToWishlist(item))
-
-        notify("success", "Product Added To Wishlist")
 
     }
-    const handleRemoveWishlist = () => {
-        dispatch(deleteWishlistProduct(id))
-
-        
-    }
-
+  
 
     return (
         <>
@@ -62,12 +53,10 @@ const Card = (props) => {
                     <div className='absolute top-[5px] left-[5px] bg-red-900 text-white rounded-sm flex p-1 cursor-pointer text-sm'>
                         {discountPercentage}%
                     </div>
-                    {props?.wishlist && <div  onClick={handleRemoveWishlist}   className='absolute top-[5px] right-[5px] bg-white rounded-[50%] flex p-1 cursor-pointer'>
-                        <FavoriteIcon style={{ width: "18px", height: "18px" }}/>
-                    </div>}
-                    {!props?.wishlist && <div onClick={AddToWishlistFunc} className='absolute top-[5px] right-[5px] bg-white rounded-[50%] flex p-1 cursor-pointer'>
-                        <FavoriteBorderIcon style={{ width: "18px", height: "18px" }} />
-                    </div>}
+                   
+                    <div onClick={AddToWishlistFunc} className='absolute top-[5px] right-[5px] bg-white rounded-[50%] flex p-1 cursor-pointer'>
+                        {isExist ? <FavoriteIcon style={{ width: "18px", height: "18px" }} /> : <FavoriteBorderIcon style={{ width: "18px", height: "18px" }} />}
+                    </div>
                     <div className='absolute top-[35px] right-[5px] bg-white rounded-[50%] flex p-1 cursor-pointer'>
                         <Link to={`/product/${id}`}>
                             <VisibilityIcon style={{ width: "18px", height: "18px" }} />

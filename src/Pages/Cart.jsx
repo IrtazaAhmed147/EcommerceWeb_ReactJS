@@ -49,7 +49,7 @@ const Cart = () => {
             />
 
             <div className='py-15 w-[90%] m-auto'>
-                <p className='text-neutral-500'>Home / <span className='text-black'>Cart</span></p>
+                <p className='text-neutral-500'> <Link to={"/"}>Home</Link> / <span className='text-black'>Cart</span></p>
             </div>
 
             <table style={{ borderSpacing: "15px", borderCollapse: "separate" }} className='m-auto w-[97%] md:w-[90%] mb-6' >

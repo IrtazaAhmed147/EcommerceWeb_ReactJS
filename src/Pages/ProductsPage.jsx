@@ -2,9 +2,9 @@ import React, { useEffect, useState } from 'react'
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 // import {  getProductByCategories } from '../Utils/Api';
 import Card from '../Components/Card';
-import { Link, useParams } from 'react-router';
+import { Link, useNavigate, useParams } from 'react-router';
 import { CircularProgress } from '@mui/material';
-import { getAllProducts, getCategoriesList, getProductByCategories, getProductBySearch } from '../Features/ApiSlice';
+import { emptySearch, getAllProducts, getCategoriesList, getProductByCategories, getProductBySearch } from '../Features/ApiSlice';
 import { useDispatch, useSelector } from 'react-redux';
 
 const ProductsPage = () => {
@@ -46,13 +46,35 @@ const ProductsPage = () => {
         }
         dispatch(getCategoriesList())
     }, [dispatch])
+    const navigate = useNavigate()
+    const handleOption = (e)=> {
+        console.log(e.target.value);
+        dispatch(emptySearch())
+        navigate(`/products/category/${e.target.value}`)
+    }
 
-
-
-
+    console.log(categorySlug);
+    
     return (
         <>
-            <div className='flex w-full'>
+            <div className='block w-full md:flex'>
+
+                {window.innerWidth <= 767 && <div className='w-full my-3 px-2 block md:hidden'>
+                    <select value={categorySlug === "all" ? "Select Category" : categorySlug}  className='w-full p-2 cursor-pointer rounded-md outline-none bg-neutral-300' onChange={(e)=> handleOption(e)}>
+                        <option className='bg-neutral-200' value="Select Category" disabled={true}>Select Category</option>
+                        <option className='bg-neutral-200' value="all">All</option>
+                        {categoriesList?.map((category) => {
+                            return <option key={category.name}  className='bg-neutral-200' value={category.slug}>
+                                    {category.name}
+                                
+
+                            </option>
+                        })}
+
+                    </select>
+                </div>}
+
+
                 <div className='w-[25%] lg:w-[20%] border-r pt-7 pe-4  justify-end hidden md:flex'>
                     <ul className='flex flex-col gap-[10px]'>
 
@@ -62,7 +84,10 @@ const ProductsPage = () => {
                             </div>
                         </>}
 
-                        {navigator.onLine && !listLoader && <>
+
+
+
+                        {window.innerWidth > 767 &&  navigator.onLine && !listLoader && <>
                             <li className='duration-[0.5s] transition-all ease-in-out flex justify-between w-[160px] px-2 rounded-md hover:bg-neutral-200 cursor-pointer'>
                                 <Link to={"/products/category/all"}>
                                     <p>All</p>
@@ -72,7 +97,7 @@ const ProductsPage = () => {
                                 </Link>
                             </li>
                             {categoriesList?.map((category) => {
-                                return <li key={category.name} onClick={() => dispatch(getProductByCategories(category.slug))} className='duration-[0.5s] transition-all ease-in-out flex justify-between w-[160px] px-2 rounded-md hover:bg-neutral-200 cursor-pointer'>
+                                return <li key={category.name} onClick={() => dispatch(emptySearch())} className='duration-[0.5s] transition-all ease-in-out flex justify-between w-[160px] px-2 rounded-md hover:bg-neutral-200 cursor-pointer'>
                                     <Link to={`/products/category/${category.slug}`}>
                                         <p>{category.name}</p>
                                         <p className='hidden'>
@@ -97,7 +122,7 @@ const ProductsPage = () => {
                         <div className='flex flex-wrap md:gap-3 p-2'>
                             {total === 0 && "Product Not Found"}
                             {products?.map((item) => {
-                                return <Card key={item.id} {...item} wishlist={isInWishlist(item.id)}  />
+                                return <Card key={item.id} {...item} wishlist={isInWishlist(item.id)} />
 
                             })}
                         </div> </>}
