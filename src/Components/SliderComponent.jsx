@@ -19,13 +19,13 @@ const SliderComponent = (props) => {
         infinite: true,
         speed: 500,
         slidesToShow: where === "poster" ? 1 : 5,
-        slidesToScroll: 3,
+        slidesToScroll: where === "poster" ? 1 : 3,
         responsive: [
             {
                 breakpoint: 1024,
                 settings: {
                     slidesToShow: where === "poster" ? 1 : 3,
-                    slidesToScroll: 3,
+                    slidesToScroll: where === "poster" ? 1 : 3,
                     infinite: true,
                     dots: false
                 }
@@ -34,7 +34,7 @@ const SliderComponent = (props) => {
                 breakpoint: 650,
                 settings: {
                     slidesToShow: where === "poster" ? 1 : 2,
-                    slidesToScroll: 2,
+                    slidesToScroll: where === "poster" ? 1 : 2,
                     initialSlide: 2,
                     dots: false
                 }

@@ -8,6 +8,7 @@ import ProductDetail from './Pages/ProductDetail'
 import Wishlist from "./Pages/Wishlist"
 import Cart from './Pages/Cart'
 import ProductsPage from './Pages/ProductsPage'
+import NotFound from './Pages/NotFound'
 
 function App() {
 
@@ -23,6 +24,7 @@ function App() {
           <Route path='/products/category/:categorySlug' element={<ProductsPage />} />
           <Route path='/wishlist' element={<Wishlist />} />
           <Route path='/cart' element={<Cart />} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
 
 
