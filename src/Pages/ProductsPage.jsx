@@ -22,6 +22,7 @@ const ProductsPage = () => {
     const searchValue = useSelector(state => state.api.search);
     const dispatch = useDispatch();
     const loader = useSelector(state => state.loader.AllProductsApi);
+    const [skipNo , setSkipNo] = useState(0)
 
 
 
@@ -52,8 +53,13 @@ const ProductsPage = () => {
         dispatch(emptySearch())
         navigate(`/products/category/${e.target.value}`)
     }
-
-    console.log(categorySlug);
+    
+    const handlePagination = ()=> {
+        setSkipNo(prev => prev + 20)
+        // console.log( prev + 20);
+        dispatch(getAllProducts(skipNo));
+        console.log(skipNo);
+    }
     
     return (
         <>
@@ -88,8 +94,8 @@ const ProductsPage = () => {
 
 
                         {window.innerWidth > 767 &&  navigator.onLine && !listLoader && <>
-                            <li className='duration-[0.5s] transition-all ease-in-out flex justify-between w-[160px] px-2 rounded-md hover:bg-neutral-200 cursor-pointer'>
-                                <Link to={"/products/category/all"}>
+                            <li className='duration-[0.5s] transition-all ease-in-out flex justify-between w-[160px] px-2 rounded-md hover:bg-neutral-200 cursor-pointer' onClick={() => dispatch(emptySearch())} >
+                                <Link to={"/products/category/all"} style={{width: "100%"}} >
                                     <p>All</p>
                                     <p className='hidden'>
                                         <NavigateNextIcon />
@@ -97,8 +103,8 @@ const ProductsPage = () => {
                                 </Link>
                             </li>
                             {categoriesList?.map((category) => {
-                                return <li key={category.name} onClick={() => dispatch(emptySearch())} className='duration-[0.5s] transition-all ease-in-out flex justify-between w-[160px] px-2 rounded-md hover:bg-neutral-200 cursor-pointer'>
-                                    <Link to={`/products/category/${category.slug}`}>
+                                return <li key={category.name}  onClick={() => dispatch(emptySearch())} className='duration-[0.5s] transition-all ease-in-out flex justify-between w-[160px] px-2 rounded-md hover:bg-neutral-200 cursor-pointer'>
+                                    <Link to={`/products/category/${category.slug}`} style={{width: "100%"}}>
                                         <p>{category.name}</p>
                                         <p className='hidden'>
                                             <NavigateNextIcon />
@@ -112,6 +118,7 @@ const ProductsPage = () => {
 
                     </ul>
                 </div>
+                
                 <div className='w-[100%] md:w-[75%] px-3 my-5 m-auto min-h-screen' >
                     {loader && <div className='w-[100%] h-screen flex items-center justify-center'>
                         <CircularProgress color="inherit" />
@@ -126,6 +133,8 @@ const ProductsPage = () => {
 
                             })}
                         </div> </>}
+
+                        <button className='cursor-pointer' onClick={handlePagination}>Next Page</button>
                 </div>
 
             </div>

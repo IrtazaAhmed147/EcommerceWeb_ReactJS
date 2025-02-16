@@ -15,6 +15,9 @@ export const getApi = createSlice({
         setProducts: (state, action) => {
             state.products = action.payload;
         },
+        // addMoreProducts: (state, action) => {
+        //     state.products = [...state.products, ...action.payload]; // Append new products
+        // },
         setCategoryList: (state, action) => {
             state.categoryList = action.payload;
         },
@@ -40,21 +43,26 @@ export const getApi = createSlice({
 })
 
 
-export const { setProducts, setCategoryList, setHomeProducts, setTodayProducts, setSingleProduct, setSearch,emptySearch } = getApi.actions
+export const { setProducts, setCategoryList, setHomeProducts, setTodayProducts, setSingleProduct, setSearch,emptySearch, addMoreProducts } = getApi.actions
 export default getApi.reducer
 
 
 
 
-export const getAllProducts = () => async (dispatch) => {
+export const getAllProducts = (skip = 0) => async (dispatch) => {
 
     dispatch(setApiLoading({ apiName: "AllProductsApi", isLoading: true }));
     dispatch(emptySearch())
     try {
-        const response = await fetch('https://dummyjson.com/products?limit=20&select=title,price,rating,thumbnail,discountPercentage')
+        const response = await fetch(`https://dummyjson.com/products?limit=20&skip=${skip}&select=title,price,rating,thumbnail,discountPercentage`)
         const data = await response.json()
         dispatch(setApiLoading({ apiName: "AllProductsApi", isLoading: false }));
-        dispatch(setProducts(data))
+        // if (skip === 0) {
+            dispatch(setProducts(data)); // First-time fetch, replace products
+        // }
+        //  else {
+        //     dispatch(addMoreProducts(data.products)); // Append new products
+        // }
         return data
     } catch (error) {
         console.log(error);
