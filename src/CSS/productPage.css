@@ -2,26 +2,9 @@
     overflow: hidden !important;
 }
 
-.products-container {
-    min-height: 80vh; /* Or a fixed height */
-    overflow-y: auto; /* Ensure the scrollbar appears only when necessary */
-}
-.product-img {
-    height: 200px; /* Adjust based on your design */
-    object-fit: cover; /* Ensure the images don't stretch */
-}
-
-.loading .products-wrapper {
-    overflow: hidden;  /* Hide scrollbar while loading */
-}
-
-/* Show scrollbar once content is loaded */
-.loaded .products-wrapper {
-    overflow-y: auto;
-}
-
 .loader-container {
-    min-height: 50px; /* Ensure there is always space reserved for the loader */
+    min-height: 200px; /* Ensure there is always space reserved for the loader */
+    width: 100%;
     display: flex;
     align-items: center;
     justify-content: center;

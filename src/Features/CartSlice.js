@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
     items: JSON.parse(localStorage.getItem("cart")) || [],
     subTotal: 0,
+    toastify: {toast: false},
 };
 
 export const cartSlice = createSlice({
@@ -33,10 +34,13 @@ export const cartSlice = createSlice({
             state.subTotal = state.items.reduce((a, b) => {
                 return a + parseInt(b.totalPrice)
             }, 0)
+        },
+        setToastify: (state ,action)=> {
+           state.toastify = action.payload
         }
 
     },
 });
 
-export const { addToCart, updateQuantity, subTotalPrice, deleteCartItem } = cartSlice.actions;
+export const { addToCart, updateQuantity, subTotalPrice, deleteCartItem, setToastify } = cartSlice.actions;
 export default cartSlice.reducer;

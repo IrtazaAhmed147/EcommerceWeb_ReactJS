@@ -18,9 +18,7 @@ export const getApi = createSlice({
             state.products = action.payload;
         },
         addMoreProducts: (state, action) => {
-            
             state.products = action.payload 
-            
         },
         setCategoryList: (state, action) => {
             state.categoryList = action.payload;
@@ -54,7 +52,6 @@ export default getApi.reducer
 
 
 export const getAllProducts = (skip = 0) => async (dispatch) => {
-    console.log(skip);
     
     dispatch(setApiLoading({ apiName: "AllProductsApi", isLoading: true }));
     try {
@@ -64,13 +61,14 @@ export const getAllProducts = (skip = 0) => async (dispatch) => {
         dispatch(setApiLoading({ apiName: "AllProductsApi", isLoading: false }));
         
         if (skip === 0) {
-            dispatch(setProducts(data)); // First load, replace products
+            
+            dispatch(setProducts(data));
         } else {
             dispatch(addMoreProducts(data));
         }
     } catch (error) {
-        console.log(error);
         dispatch(setApiLoading({ apiName: "AllProductsApi", isLoading: false }));
+        throw new Error(error.message)
     }
 
 }
@@ -87,7 +85,7 @@ export const getCategoriesList = () => async (dispatch) => {
         return data
     } catch (error) {
         dispatch(setApiLoading({ apiName: "categoryListApi", isLoading: false }));
-        console.log(error);
+        throw new Error(error.message)
 
     }
 }
@@ -99,14 +97,13 @@ export const getProductByCategories = (category = "beauty") => async (dispatch) 
     try {
         const response = await fetch(`https://dummyjson.com/products/category/${category}?select=title,price,thumbnail,discountPercentage,rating`)
         const data = await response.json()
-        console.log(data);
         
         dispatch(setApiLoading({ apiName: "AllProductsApi", isLoading: false }));
         dispatch(setProducts(data))
         return data
     } catch (error) {
         dispatch(setApiLoading({ apiName: "AllProductsApi", isLoading: false }));
-        console.log(error);
+        throw new Error(error.message)
 
     }
 
@@ -120,8 +117,9 @@ export const getProductBySearch = (input = "ball") => async (dispatch) => {
         dispatch(setProducts(data))
         return data
     } catch (error) {
+        
         dispatch(setApiLoading({ apiName: "AllProductsApi", isLoading: false }));
-        console.log(error);
+        throw new Error(error.message)
 
     }
 
@@ -139,7 +137,7 @@ export const getHomeProducts = () => async (dispatch) => {
         return data
     } catch (error) {
         dispatch(setApiLoading({ apiName: "HomeProductsApi", isLoading: false }));
-        console.log(error);
+        throw new Error(error.message)
 
     }
 }
@@ -159,7 +157,7 @@ export const todaysProductApi = () => async (dispatch) => {
         return data
     } catch (error) {
         dispatch(setApiLoading({ apiName: "AllProductsApi", isLoading: false }));
-        console.log(error);
+        throw new Error(error.message)
 
     }
 }
@@ -175,7 +173,7 @@ export const getSingleProduct = (id = 3) => async (dispatch) => {
         return data
     } catch (error) {
         dispatch(setApiLoading({ apiName: "AllProductsApi", isLoading: false }));
-        console.log(error);
+        throw new Error(error.message)
 
     }
 } 

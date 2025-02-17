@@ -5,13 +5,13 @@ import Slider from "react-slick";
 import "../CSS/slider.css"
 import DevicesIcon from '@mui/icons-material/Devices';
 import { Link } from 'react-router';
+import { useDispatch } from 'react-redux';
 
 
 const SliderComponent = (props) => {
 
     const { where, data } = props
-    // console.log(where);
-    // console.log(data);
+   const dispatch = useDispatch()
     
     const settings = {
         accessibility: true,
@@ -27,7 +27,7 @@ const SliderComponent = (props) => {
                     slidesToShow: where === "poster" ? 1 : 3,
                     slidesToScroll: where === "poster" ? 1 : 3,
                     infinite: true,
-                    dots: false
+                    dots: true ,
                 }
             },
             {
@@ -36,7 +36,7 @@ const SliderComponent = (props) => {
                     slidesToShow: where === "poster" ? 1 : 2,
                     slidesToScroll: where === "poster" ? 1 : 2,
                     initialSlide: 2,
-                    dots: false
+                    dots:true 
                 }
             },
             {
@@ -44,7 +44,7 @@ const SliderComponent = (props) => {
                 settings: {
                     slidesToShow: 1,
                     slidesToScroll: 1,
-                    dots: false
+                    dots:  where === "poster" ? true : false,
                 }
             }
         ]
@@ -71,10 +71,10 @@ const SliderComponent = (props) => {
                 <Slider {...settings}>
 
                     {data?.map((category) => {
-                        return  <div key={category.name} className='w-[170px] h-[140px]  px-2'>
+                        return  <div key={category.name} className='w-[170px] h-[140px]  px-2 ' onClick={()=> dispatch(emptySearch())}>
 
                             <Link to={`/products/category/${category.slug}`}>
-                            <div className='items-center justify-center gap-1 flex-col w-full h-full flex border-2 rounded-md border-neutral-300  text-2xl font-bold cursor-pointer hover:bg-neutral-100 duration-[0.3s] transition-all ease-in-out'>
+                            <div className='items-center justify-center gap-1 flex-col w-full h-full flex border-2 rounded-md border-neutral-300  text-xl sm:text-2xl font-bold cursor-pointer hover:bg-neutral-100 duration-[0.3s] transition-all ease-in-out'>
                                 <DevicesIcon style={{ width: "30px", height: "30px" }} />
                                 <h1 >{category.name}</h1>
                             </div>

@@ -2,7 +2,7 @@ import { toast } from "react-toastify";
 
 export const notify = (theme, msg)=> {
     return toast[theme](msg, {
-         position: "top-right",
+        position: "bottom-right",
          autoClose: 3000,
          hideProgressBar: false,
          closeOnClick: false,

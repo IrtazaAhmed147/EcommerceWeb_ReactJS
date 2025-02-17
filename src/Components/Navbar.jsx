@@ -129,10 +129,12 @@ const Navbar = () => {
                                 sx={{ display: { xs: 'block', md: 'none' } }}
                             >
                                 {pages.map((page) => (
-                                    <MenuItem key={page} onClick={handleCloseNavMenu} >
-                                        <Link to={page === "Home" ? "/" : page === "Contact" ? "/contact" : "/about"} key={page}>
-                                            <Typography sx={{ textAlign: 'center', color: "black" }} style={{ color: "black" }}>{page}</Typography>
-                                        </Link>
+                                    <MenuItem key={page} onClick={() => {
+                                        handleCloseNavMenu()
+                                        navigate(page === "Home" ? "/" : page === "Contact" ? "/contact" : "/about")
+                                    }} >
+                                        <Typography sx={{ textAlign: 'center', color: "black" }} style={{ color: "black" }}>{page}</Typography>
+
                                     </MenuItem>
                                 ))}
                             </Menu>

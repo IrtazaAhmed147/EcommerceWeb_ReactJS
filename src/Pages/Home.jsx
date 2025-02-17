@@ -7,8 +7,10 @@ import HeadsetMicIcon from '@mui/icons-material/HeadsetMic';
 import VerifiedUserOutlinedIcon from '@mui/icons-material/VerifiedUserOutlined';
 import { Button, CircularProgress } from '@mui/material';
 import { Link } from 'react-router';
-import { getCategoriesList, getHomeProducts, todaysProductApi } from '../Features/ApiSlice';
+import { emptySearch, getCategoriesList, getHomeProducts, todaysProductApi } from '../Features/ApiSlice';
 import { useDispatch, useSelector } from 'react-redux';
+import { setToastify } from '../Features/CartSlice';
+import { notify } from '../Utils/HelperFunctions';
 
 
 
@@ -22,47 +24,74 @@ const Home = () => {
     const categoriesListLoader = useSelector(state => state.loader.categoryListApi);
     const loader = useSelector(state => state.loader.HomeProductsApi);
     const todayLoader = useSelector(state => state.loader.todayProductApi);
+    const toaster = useSelector(state => state.cart.toastify);
 
     useEffect(() => {
+        if (products?.length > 0) {
+            return
+        }
         dispatch(getHomeProducts())
     }, [dispatch])
     useEffect(() => {
+        if (todayProducts?.length > 0) {
+            return
+        }
         dispatch(todaysProductApi())
     }, [dispatch])
     useEffect(() => {
-        if (categoriesList.length > 0) {
+
+        if (categoriesList?.length > 0) {
             return
         }
         dispatch(getCategoriesList())
     }, [dispatch])
 
-    
+    useEffect(() => {
+        if (toaster.toast) {
+            notify(toaster.theme, toaster.msg)
+            dispatch(setToastify({ toast: false }))
+        }
+    }, [toaster])
+
 
 
     return (
         <>
+
+           
             <div className='flex w-full'>
-                <div className='w-[25%] lg:w-[20%] border-r pt-7 pe-4  justify-end hidden md:flex'>
-                    <ul className='flex flex-col gap-[10px]'>
-                        {categoriesListLoader && <>
-                            <div className='w-[150px] h-[400px] flex items-center justify-center'>
-                                <CircularProgress color="inherit" />
-                            </div>
-                        </>}
+                {window.innerWidth > 767 && (
+                    <div className='w-[25%] lg:w-[20%] border-r pt-7 pe-4 justify-end hidden md:flex'>
+                        <ul className='flex flex-col gap-[10px] mb-5'>
+                            {categoriesListLoader ? (
+                                <div className='w-[150px] h-[400px] flex items-center justify-center'>
+                                    <CircularProgress color="inherit" />
+                                </div>
+                            ) : (
+                                <>
+                                    {categoriesList?.length !== 0 && <li className='duration-[0.5s] transition-all ease-in-out flex justify-between w-[160px] px-2 rounded-md hover:bg-neutral-200 cursor-pointer' onClick={() => dispatch(emptySearch())}>
+                                        <Link to={"/products/category/all"} style={{ width: "100%" }} >
+                                            <p>All</p>
+                                            <p className='hidden'><NavigateNextIcon /></p>
+                                        </Link>
+                                    </li>}
+                                    {categoriesList?.slice(0, 8).map((category) => (
+                                        <li key={category.slug} onClick={() => dispatch(emptySearch())} className='duration-[0.5s] transition-all ease-in-out flex justify-between w-[160px] px-2 rounded-md hover:bg-neutral-200 cursor-pointer'>
+                                            <Link to={`/products/category/${category.slug}`} style={{ width: "100%" }}>
+                                                <p>{category.name}</p>
+                                                <p className='hidden'><NavigateNextIcon /></p>
+                                            </Link>
+                                        </li>
+                                    ))}
+                                </>
+                            )}
+                        </ul>
+                    </div>
+                )}
 
-                        {!categoriesListLoader && categoriesList?.slice(0, 8).map((category) => {
-                            return <li key={category.name} className='duration-[0.5s] transition-all ease-in-out flex justify-between w-[160px] px-2 rounded-md hover:bg-neutral-200 cursor-pointer'>
-                                <p>{category.name}</p>
-                                <p className='hidden'>
-                                    <NavigateNextIcon />
-                                </p>
-                            </li>
-                        })}
 
 
 
-                    </ul>
-                </div>
                 <div className='w-[80%] md:w-[65%]  m-auto mt-[30px] '>
                     <SliderComponent where="poster" />
                 </div>
@@ -72,11 +101,11 @@ const Home = () => {
                 <div className='flex gap-1 items-center mb-3    '>
 
                     <div className='bg-red-900 h-[20px] w-[13px] rounded-sm'></div>
-                    <h3 className='text-red-900 '>Groceries</h3>
+                    <h3 className='text-red-900'>Groceries</h3>
                 </div>
-                <div className='flex justify-center w-full gap-3 flex-wrap min-h-[300px] items-center'>
-                {!navigator.onLine && <h1 className='text-red-800 text-xl'>No Internet Connection</h1>}
-                    {todayLoader && <CircularProgress color="inherit" />}
+                <div className='flex lg:justify-center w-full gap-[3px] mb-8 flex-wrap min-h-[300px] items-center'>
+                    {!navigator.onLine && <h1 className='text-red-800 text-xl'>No Internet Connection</h1>}
+                    {todayLoader && <div className='w-full h-full flex justify-center items-center'> <CircularProgress color="inherit" /> </div>}
 
                     {!todayLoader && todayProducts?.map((item) => {
                         return <Card key={item.id} {...item} />
@@ -86,7 +115,7 @@ const Home = () => {
                 </div>
                 <div className='flex justify-center w-full'>
                     <Link to={`/products/category/groceries`}>
-                        <Button style={{ backgroundColor: "var(--button2)", margin: "auto" }} variant="contained">View All Products</Button>
+                        <Button onClick={() => dispatch(emptySearch())} style={{ backgroundColor: "var(--button2)", margin: "auto" }} variant="contained">View All Grocery Products</Button>
                     </Link>
                 </div>
             </div>
@@ -114,10 +143,10 @@ const Home = () => {
                     <div className='bg-red-900 h-[20px] w-[13px] rounded-sm'></div>
                     <h3 className='text-red-900 '>Our Products</h3>
                 </div>
-                <h1 className='text-4xl font-bold'>Explore Our Products</h1>
-                <div className='flex justify-center w-full gap-3 flex-wrap min-h-[300px] items-center'>
-                {!navigator.onLine && <h1 className='text-red-800 text-xl'>No Internet Connection</h1>}
-                    {loader && <CircularProgress color="inherit" />}
+                <h1 className='text-4xl font-bold mb-5'>Explore Our Products</h1>
+                <div className='flex lg:justify-center  w-full gap-[3px] mb-8  flex-wrap min-h-[300px] items-center'>
+                    {!navigator.onLine && <h1 className='text-red-800 text-xl'>No Internet Connection</h1>}
+                    {loader && <div className='w-full h-full flex justify-center items-center'> <CircularProgress color="inherit" /> </div>}
                     {!loader && products?.map((item) => {
                         return <Card key={item.id} {...item} />
 
@@ -126,7 +155,7 @@ const Home = () => {
                 </div>
                 <div className='flex justify-center w-full'>
                     <Link to={`/products/category/all`}>
-                        <Button style={{ backgroundColor: "var(--button2)", margin: "auto" }} variant="contained">View All Products</Button>
+                        <Button onClick={() => dispatch(emptySearch())} style={{ backgroundColor: "var(--button2)", margin: "auto" }} variant="contained">View All Products</Button>
                     </Link>
                 </div>
 

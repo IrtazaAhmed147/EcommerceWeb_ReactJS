@@ -5,10 +5,11 @@ import { Button } from '@mui/material'
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import { ToastContainer } from 'react-toastify';
 import { notify } from '../Utils/HelperFunctions';
-import { Link } from 'react-router';
+import { Link, useNavigate } from 'react-router';
+import { emptySearch } from '../Features/ApiSlice';
 const Cart = () => {
 
-
+    const navigate = useNavigate()
     
     const dispatch = useDispatch();
 
@@ -36,7 +37,7 @@ const Cart = () => {
         <>
 
             <ToastContainer
-                position="top-right"
+               position="bottom-right"
                 autoClose={5000}
                 hideProgressBar={false}
                 newestOnTop={false}
@@ -96,7 +97,10 @@ const Cart = () => {
             </table>
 
             <div className='py-7 w-[90%] m-auto'>
-                <button className='border-1 px-2 py-1 rounded-sm'>Return To Shop</button>
+                <button className='border-1 px-2 py-1 rounded-sm cursor-pointer' onClick={()=>{
+                    dispatch(emptySearch())
+                     navigate(`/products/category/all`)
+                     }}>Return To Shop</button>
             </div>
             <div className='py-7 w-[90%] m-auto flex justify-between my-5 flex-wrap gap-3'>
                 <div className='flex gap-3  h-[50px]'>
