@@ -51,7 +51,7 @@ const Navbar = () => {
 
             dispatch(setSearch(input.current.value));
             input.current.value = ""
-            navigate(`/products/category/all`)
+            navigate(`/products/category/search`)
         } else if (size === "phone") {
             input.current.value = ""
             if (!inputRes.current.value.trim()) {
@@ -61,7 +61,7 @@ const Navbar = () => {
 
             dispatch(setSearch(inputRes.current.value));
             inputRes.current.value = ""
-            navigate(`/products/category/all`)
+            navigate(`/products/category/search`)
         }
 
 

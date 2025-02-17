@@ -9,15 +9,19 @@ export const getApi = createSlice({
         homeProducts: [],
         todayProducts: [],
         singleProduct: {},
+        totalProducts: 0,
         search: JSON.parse(localStorage.getItem("searchVal")) || "",
     },
     reducers: {
+       
         setProducts: (state, action) => {
             state.products = action.payload;
         },
-        // addMoreProducts: (state, action) => {
-        //     state.products = [...state.products, ...action.payload]; // Append new products
-        // },
+        addMoreProducts: (state, action) => {
+            
+            state.products = action.payload 
+            
+        },
         setCategoryList: (state, action) => {
             state.categoryList = action.payload;
         },
@@ -50,24 +54,23 @@ export default getApi.reducer
 
 
 export const getAllProducts = (skip = 0) => async (dispatch) => {
-
+    console.log(skip);
+    
     dispatch(setApiLoading({ apiName: "AllProductsApi", isLoading: true }));
-    dispatch(emptySearch())
     try {
-        const response = await fetch(`https://dummyjson.com/products?limit=20&skip=${skip}&select=title,price,rating,thumbnail,discountPercentage`)
-        const data = await response.json()
+        const response = await fetch(`https://dummyjson.com/products?limit=20&skip=${skip}&select=title,price,rating,thumbnail,discountPercentage`);
+        const data = await response.json();
+        
         dispatch(setApiLoading({ apiName: "AllProductsApi", isLoading: false }));
-        // if (skip === 0) {
-            dispatch(setProducts(data)); // First-time fetch, replace products
-        // }
-        //  else {
-        //     dispatch(addMoreProducts(data.products)); // Append new products
-        // }
-        return data
+        
+        if (skip === 0) {
+            dispatch(setProducts(data)); // First load, replace products
+        } else {
+            dispatch(addMoreProducts(data));
+        }
     } catch (error) {
         console.log(error);
         dispatch(setApiLoading({ apiName: "AllProductsApi", isLoading: false }));
-
     }
 
 }
@@ -77,7 +80,9 @@ export const getCategoriesList = () => async (dispatch) => {
     try {
         const response = await fetch('https://dummyjson.com/products/categories')
         const data = await response.json()
+
         dispatch(setApiLoading({ apiName: "categoryListApi", isLoading: false }));
+       
         dispatch(setCategoryList(data))
         return data
     } catch (error) {
@@ -92,8 +97,10 @@ export const getProductByCategories = (category = "beauty") => async (dispatch) 
     dispatch(setApiLoading({ apiName: "AllProductsApi", isLoading: true }));
     dispatch(emptySearch())
     try {
-        const response = await fetch(`https://dummyjson.com/products/category/${category}?select=title,price,thumbnail,discountPercentage`)
+        const response = await fetch(`https://dummyjson.com/products/category/${category}?select=title,price,thumbnail,discountPercentage,rating`)
         const data = await response.json()
+        console.log(data);
+        
         dispatch(setApiLoading({ apiName: "AllProductsApi", isLoading: false }));
         dispatch(setProducts(data))
         return data

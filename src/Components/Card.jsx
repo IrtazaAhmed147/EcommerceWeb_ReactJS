@@ -14,7 +14,7 @@ const Card = (props) => {
     const { id, title, thumbnail, rating, price, discountPercentage } = props
     const wishlistProducts = useSelector(state => state.wishlist.wishlistProducts);
     const isExist = wishlistProducts.some(product => product.id === id);
-
+    
     let discountedPrice = price - (price * (discountPercentage / 100))
     const dispatch = useDispatch()
 

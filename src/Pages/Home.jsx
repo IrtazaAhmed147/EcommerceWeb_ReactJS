@@ -18,7 +18,6 @@ const Home = () => {
     const dispatch = useDispatch();
     const products = useSelector(state => state.api.homeProducts);
     const todayProducts = useSelector(state => state.api.todayProducts);
-
     const categoriesList = useSelector(state => state.api.categoryList);
     const categoriesListLoader = useSelector(state => state.loader.categoryListApi);
     const loader = useSelector(state => state.loader.HomeProductsApi);
