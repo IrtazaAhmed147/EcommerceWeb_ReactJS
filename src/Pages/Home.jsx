@@ -7,10 +7,11 @@ import HeadsetMicIcon from '@mui/icons-material/HeadsetMic';
 import VerifiedUserOutlinedIcon from '@mui/icons-material/VerifiedUserOutlined';
 import { Button, CircularProgress } from '@mui/material';
 import { Link } from 'react-router';
-import { emptySearch, getCategoriesList, getHomeProducts, todaysProductApi } from '../Features/ApiSlice';
+import { emptySearch, getCategoriesList, getHomeProducts, groceryProductApi } from '../Features/ApiSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { setToastify } from '../Features/CartSlice';
 import { notify } from '../Utils/HelperFunctions';
+import poster from "../assets/poster.png"
 
 
 
@@ -19,11 +20,11 @@ const Home = () => {
 
     const dispatch = useDispatch();
     const products = useSelector(state => state.api.homeProducts);
-    const todayProducts = useSelector(state => state.api.todayProducts);
+    const groceryProducts = useSelector(state => state.api.groceryProducts);
     const categoriesList = useSelector(state => state.api.categoryList);
     const categoriesListLoader = useSelector(state => state.loader.categoryListApi);
     const loader = useSelector(state => state.loader.HomeProductsApi);
-    const todayLoader = useSelector(state => state.loader.todayProductApi);
+    const groceryLoader = useSelector(state => state.loader.AllProductsApi);
     const toaster = useSelector(state => state.cart.toastify);
 
     useEffect(() => {
@@ -33,10 +34,10 @@ const Home = () => {
         dispatch(getHomeProducts())
     }, [dispatch])
     useEffect(() => {
-        if (todayProducts?.length > 0) {
+        if (groceryProducts?.length > 0) {
             return
         }
-        dispatch(todaysProductApi())
+        dispatch(groceryProductApi())
     }, [dispatch])
     useEffect(() => {
 
@@ -105,19 +106,21 @@ const Home = () => {
                 </div>
                 <div className='flex lg:justify-center w-full gap-[3px] mb-8 flex-wrap min-h-[300px] items-center'>
                     {!navigator.onLine && <h1 className='text-red-800 text-xl'>No Internet Connection</h1>}
-                    {todayLoader && <div className='w-full h-full flex justify-center items-center'> <CircularProgress color="inherit" /> </div>}
+                    {groceryLoader && <div className='w-full h-full flex justify-center items-center'> <CircularProgress color="inherit" /> </div>}
 
-                    {!todayLoader && todayProducts?.map((item) => {
+                    {!groceryLoader && groceryProducts?.map((item) => {
                         return <Card key={item.id} {...item} />
 
                     })}
 
                 </div>
+
                 <div className='flex justify-center w-full'>
                     <Link to={`/products/category/groceries`}>
                         <Button onClick={() => dispatch(emptySearch())} style={{ backgroundColor: "var(--button2)", margin: "auto" }} variant="contained">View All Grocery Products</Button>
                     </Link>
                 </div>
+
             </div>
             <div className=' w-[90%] m-auto my-4'>
                 <div className='flex gap-1 items-center mb-3'>
@@ -134,9 +137,11 @@ const Home = () => {
 
             </div>
 
-            <div className='w-[90%] h-[200px] sm:h-[300px] lg:h-[470px] md:h-[370px] m-auto mb-[10px]'>
-                <img style={{ width: "100%", height: "100%" }} src="https://image.adsoftheworld.com/n2dcz8j81bv7x8ep3v4xkp8qfuxl" alt="" />
+            <div className='w-[90%] h-[150px] sm:h-[250px] lg:h-[340px] md:h-[290px] m-auto mb-[10px]'>
+                <img style={{ width: "100%", height: "100%" }} src={poster} alt="" />
             </div>
+
+
             <div className=' w-[90%] m-auto my-4'>
                 <div className='flex gap-1 items-center mb-3'>
 

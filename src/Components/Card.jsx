@@ -6,8 +6,6 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import { Link } from 'react-router';
 import { addToWishlist, deleteWishlistProduct } from '../Features/WishlistSlice';
-import { notify } from '../Utils/HelperFunctions';
-import { ToastContainer } from 'react-toastify';
 import { useDispatch, useSelector } from 'react-redux';
 import { setToastify } from '../Features/CartSlice';
 
@@ -28,7 +26,6 @@ const Card = (props) => {
         } else {
             const item = { id, title, price, rating, thumbnail, discountPercentage, discountedPrice, wishlist: true };
             dispatch(addToWishlist(item));
-            // notify("success", "Product Added To Wishlist");
             dispatch(setToastify({theme: "success", msg: "Product Added To Wishlist", toast: true}))
         }
 

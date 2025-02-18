@@ -1,18 +1,17 @@
 import React, { useEffect, useState } from 'react'
-import StarIcon from '@mui/icons-material/Star';
-import VerifiedUserOutlinedIcon from '@mui/icons-material/VerifiedUserOutlined';
-import AutorenewOutlinedIcon from '@mui/icons-material/AutorenewOutlined';
-import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import { Button, CircularProgress } from '@mui/material';
-import AddIcon from '@mui/icons-material/Add';
-import RemoveIcon from '@mui/icons-material/Remove';
 import { Link, useParams } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 import { getSingleProduct } from '../Features/ApiSlice';
 import { addToCart, updateQuantity } from '../Features/CartSlice';
-import { toast, ToastContainer } from 'react-toastify';
 import { notify } from '../Utils/HelperFunctions';
-import { addToWishlist, deleteWishlistProduct, isExistInWishlist } from '../Features/WishlistSlice';
+import { addToWishlist, deleteWishlistProduct } from '../Features/WishlistSlice';
+import StarIcon from '@mui/icons-material/Star';
+import VerifiedUserOutlinedIcon from '@mui/icons-material/VerifiedUserOutlined';
+import AutorenewOutlinedIcon from '@mui/icons-material/AutorenewOutlined';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import AddIcon from '@mui/icons-material/Add';
+import RemoveIcon from '@mui/icons-material/Remove';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 
 const ProductDetail = () => {
@@ -101,18 +100,6 @@ const ProductDetail = () => {
     return (
         <>
 
-            <ToastContainer
-                position="top-right"
-                autoClose={5000}
-                hideProgressBar={false}
-                newestOnTop={false}
-                closeOnClick={false}
-                rtl={false}
-                pauseOnFocusLoss
-                draggable
-                pauseOnHover
-                theme="light"
-            />
 
 
 
@@ -151,8 +138,8 @@ const ProductDetail = () => {
                     </p>
                     <p className='text-xl font-semibold mb-4'>${discountedPrice}</p>
                     <p className='text-sm sm:text-base'>{description}</p>
-                    <p className='mb-3'>Brand: <span className='font-semibold'>{brand}</span></p>
-                    <h1 className='text-xl font-semibold'>Dimensions</h1>
+                   {brand && <p className='mb-3'>Brand: <span className='font-semibold'>{brand}</span></p>}
+                    <h1 className='text-xl font-semibold mt-3'>Dimensions</h1>
                     <p className=''>Width: {dimensions?.width}</p>
                     <p className=''>Height: {dimensions?.height}</p>
                     <p className='mb-3'>Depth: {dimensions?.depth}</p>

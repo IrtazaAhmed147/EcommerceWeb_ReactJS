@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
 import Card from '../Components/Card';
-import { ToastContainer } from 'react-toastify';
+import { useDispatch, useSelector } from 'react-redux'
 import { notify } from '../Utils/HelperFunctions';
 import { setToastify } from '../Features/CartSlice';
 
@@ -22,18 +21,7 @@ const Wishlist = () => {
 
   return (
     <>
-      <ToastContainer
-        position="bottom-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick={false}
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="light"
-      />
+    
 
       <div className='w-[80%] flex items-center justify-between m-auto my-15'>
         <p>Wishlist {`(${wishlistProduct?.length})`}</p>

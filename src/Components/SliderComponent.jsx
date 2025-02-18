@@ -2,10 +2,11 @@ import React from 'react'
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
-import "../CSS/slider.css"
-import DevicesIcon from '@mui/icons-material/Devices';
+import AutoAwesomeMosaicRoundedIcon from '@mui/icons-material/AutoAwesomeMosaicRounded';
 import { Link } from 'react-router';
 import { useDispatch } from 'react-redux';
+import { emptySearch } from '../Features/ApiSlice';
+import "../CSS/slider.css"
 
 
 const SliderComponent = (props) => {
@@ -75,7 +76,7 @@ const SliderComponent = (props) => {
 
                             <Link to={`/products/category/${category.slug}`}>
                             <div className='items-center justify-center gap-1 flex-col w-full h-full flex border-2 rounded-md border-neutral-300  text-xl sm:text-2xl font-bold cursor-pointer hover:bg-neutral-100 duration-[0.3s] transition-all ease-in-out'>
-                                <DevicesIcon style={{ width: "30px", height: "30px" }} />
+                                <AutoAwesomeMosaicRoundedIcon style={{ width: "30px", height: "30px" }} />
                                 <h1 >{category.name}</h1>
                             </div>
                             </Link>

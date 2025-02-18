@@ -107,18 +107,7 @@ const ProductsPage = () => {
 
         <>
 
-            <ToastContainer
-                position="bottom-right"
-                autoClose={5000}
-                hideProgressBar={false}
-                newestOnTop={false}
-                closeOnClick={false}
-                rtl={false}
-                pauseOnFocusLoss
-                draggable
-                pauseOnHover
-                theme="light"
-            />
+        
 
 
             <div className='block w-full md:flex'>

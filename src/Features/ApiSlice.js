@@ -7,7 +7,7 @@ export const getApi = createSlice({
         products: [],
         categoryList: [],
         homeProducts: [],
-        todayProducts: [],
+        groceryProducts: [],
         singleProduct: {},
         totalProducts: 0,
         search: JSON.parse(localStorage.getItem("searchVal")) || "",
@@ -26,8 +26,8 @@ export const getApi = createSlice({
         setHomeProducts: (state, action) => {
             state.homeProducts = action.payload.products;
         },
-        setTodayProducts: (state, action) => {
-            state.todayProducts = action.payload.products;
+        setGroceryProducts: (state, action) => {
+            state.groceryProducts = action.payload.products;
         },
         setSingleProduct: (state, action) => {
             state.singleProduct = action.payload;
@@ -45,7 +45,7 @@ export const getApi = createSlice({
 })
 
 
-export const { setProducts, setCategoryList, setHomeProducts, setTodayProducts, setSingleProduct, setSearch,emptySearch, addMoreProducts } = getApi.actions
+export const { setProducts, setCategoryList, setHomeProducts, setGroceryProducts, setSingleProduct, setSearch,emptySearch, addMoreProducts } = getApi.actions
 export default getApi.reducer
 
 
@@ -144,8 +144,8 @@ export const getHomeProducts = () => async (dispatch) => {
 
 
 
-export const todaysProductApi = () => async (dispatch) => {
-    let randomNum = Math.floor(Math.random() * 21)
+export const groceryProductApi = () => async (dispatch) => {
+    let randomNum = Math.floor(Math.random() * 18)
     dispatch(setApiLoading({ apiName: "AllProductsApi", isLoading: true }));
     try {
         const response = await fetch(`https://dummyjson.com/products/category/groceries?limit=4&skip=${randomNum}&select=title,price,rating,thumbnail,discountPercentage`)
@@ -153,7 +153,7 @@ export const todaysProductApi = () => async (dispatch) => {
 
         dispatch(setApiLoading({ apiName: "AllProductsApi", isLoading: false }));
 
-        dispatch(setTodayProducts(data))
+        dispatch(setGroceryProducts(data))
         return data
     } catch (error) {
         dispatch(setApiLoading({ apiName: "AllProductsApi", isLoading: false }));

@@ -2,11 +2,12 @@ import React, { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux';
 import { deleteCartItem, subTotalPrice, updateQuantity } from '../Features/CartSlice';
 import { Button } from '@mui/material'
-import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
-import { ToastContainer } from 'react-toastify';
 import { notify } from '../Utils/HelperFunctions';
 import { Link, useNavigate } from 'react-router';
 import { emptySearch } from '../Features/ApiSlice';
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+
+
 const Cart = () => {
 
     const navigate = useNavigate()
@@ -36,18 +37,7 @@ const Cart = () => {
     return (
         <>
 
-            <ToastContainer
-               position="bottom-right"
-                autoClose={5000}
-                hideProgressBar={false}
-                newestOnTop={false}
-                closeOnClick={false}
-                rtl={false}
-                pauseOnFocusLoss
-                draggable
-                pauseOnHover
-                theme="light"
-            />
+           
 
             <div className='py-15 w-[90%] m-auto'>
                 <p className='text-neutral-500'> <Link to={"/"}>Home</Link> / <span className='text-black'>Cart</span></p>
